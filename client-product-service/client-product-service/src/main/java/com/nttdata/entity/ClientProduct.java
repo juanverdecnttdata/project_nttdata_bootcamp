@@ -5,7 +5,9 @@ package com.nttdata.entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-
+/**
+ * Entidad ClientProduct de la tabla client_product
+ */
 @Entity
 public class ClientProduct {
     @Id

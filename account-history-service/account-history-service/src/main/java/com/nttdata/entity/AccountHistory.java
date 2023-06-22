@@ -3,7 +3,9 @@ package com.nttdata.entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-
+/**
+ * Entidad de la tabla account_history
+ */
 @Entity
 public class AccountHistory {
     @Id

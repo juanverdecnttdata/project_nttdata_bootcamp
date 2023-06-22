@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.function.Predicate;
-
+/**
+ * Servicio de la entidad ClientProduct para acceder al repository
+ */
 @Service
 public class ClientProductService {
 
@@ -25,22 +27,33 @@ public class ClientProductService {
 
     @Autowired
     private ProductFeignClient productFeignClient;
-
+    /**
+     * Metodo que busca todos los datos de la entidad ClientProduct
+     * @return retorna una lista de la entidad ClientProduct
+     */
     public List<ClientProduct> getAll(){
         return clientProductRepository.findAll();
     }
-
+    /**
+     * Meotodo que busca un cliente producto
+     * @param id Identificador de la entidad ClientProduct
+     * @return retorna un objeto de la entidad ClientProduct
+     */
     public ClientProduct getClientProductById(Long id){
         return clientProductRepository.findById(id).orElse(null);
     }
-
+    /**
+     * Metodo que realiza la insercion y actualizacion de la entidad ClientProduct
+     * @param clientProduct Objeto de la entidad ClientProduct
+     * @return retorna el objeto de la entidad ClientProduct insertado o actualizado
+     */
     public ClientProduct save(ClientProduct clientProduct) {
         boolean save = true;
         Message message= new Message();
         ClientProduct newClientProduct = new ClientProduct();
         Client client = clientFeignClient.getClientById(clientProduct.getId_client());
         Product product = productFeignClient.getProductById(clientProduct.getId_product());
-    System.out.println("clientProduct" + clientProduct.getId_product());
+
         Predicate<ClientProduct> isCreditProduct = isProduct -> isProduct.getId_product() < 4;
         Predicate<Client> existClient = eClient -> eClient == null;
         Predicate<Product> existProduct = eProduct -> eProduct == null;

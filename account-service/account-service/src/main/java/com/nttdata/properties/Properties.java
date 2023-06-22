@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 
+/**
+ * Clase que gestiona los strings ingresados en el archivo properties
+ */
 @Configuration
 @PropertySource("classpath:application.properties")
 public class Properties {

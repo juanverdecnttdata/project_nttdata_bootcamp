@@ -19,7 +19,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+/**
+ * Servicio de la entidad Account para acceder al repository
+ */
 @Service
 public class AccountService {
 
@@ -44,10 +46,19 @@ public class AccountService {
     @Autowired
     private AccountHistoryFeignClient accountHistoryFeignClient;
 
+    /**
+     * Metodo que busca todas los datos de la entidad Account
+     * @return retorna una lista de objetos de la entidad Account
+     */
     public List<Account> getAll(){
         return accountRepository.findAll();
     }
 
+    /**
+     * Metodo que busca las cuentas y muestra el saldo actual de ellas
+     * @param id_client Identificador de la entidad Account
+     * @return retorna una lista de la entidad QueryBalance
+     */
     public List<QueryBalance> availableBalanceAccount(Long id_client){
         List<Account> lstAccount = this.getAll();
         List<QueryBalance> lstQueryBalance = new ArrayList<QueryBalance>();
@@ -63,7 +74,11 @@ public class AccountService {
                 );
         return lstQueryBalance;
     }
-
+    /**
+     * Metodo que busca los datos client product y muestra el credito actual de ellas
+     * @param idClient Identificador de la entidad ClientProduct
+     * @return retorna una lista de la entidad QueryBalance
+     */
     public List<QueryBalance> listClientsProducts(Long idClient){
         List<ClientProduct> lstClientProduct = clientProductFeignClient.listClientsProducts();
         List<QueryBalance> lstQueryBalance = new ArrayList<QueryBalance>();
@@ -80,13 +95,22 @@ public class AccountService {
         return lstQueryBalance;
     }
 
-
+    /**
+     * Metodo que busca un objeto de la entidad Account
+     * @param id Identificador de la entidad Account
+     * @return retorna un objeto del tipo Account
+     */
     public Account getAccountById(Long id){
         Account account = accountRepository.findById(id).orElse(null);
         account.setAccountDetail(accountDetailRepository.findAccountDetailByAccount(account.getId_account()));
         return account;
     }
-    /*Metodo usado para la validacion de informacion y guardado de la entidad en la base de datos*/
+
+    /**
+     * Metodo que realiza la validacion, insercion y actualizacion de la entidad Account
+     * @param account Objeto de la entidad Account
+     * @return retorna el objeto de la entidad account insertado o actualizado
+     */
     public Account save(Account account) {
         boolean save = true;
         Message message = new Message();
@@ -170,7 +194,11 @@ public class AccountService {
         }
         return newAccount;
     }
-
+    /**
+     * Metodo que verifica si la persona existe
+     * @param lstAccountOrigin Objeto de la entidad AccountDetail
+     * @return retorna una lista de objetos de la entidad AccountDetail
+     */
     private List<AccountDetail> checkIfPersonNotExists(List<AccountDetail> lstAccountOrigin){
         List<AccountDetail> listNotExistPerson = new ArrayList<AccountDetail>();
         lstAccountOrigin.forEach((x) -> {
@@ -182,6 +210,11 @@ public class AccountService {
         return listNotExistPerson;
     }
 
+    /**
+     * Metodo que realiza la operacion de deposito,retiro, carga de consumo y pago
+     * @param accountOperation objeto de la entidad Account
+     * @return retorna un mensaje de operacion
+     */
     public Message doOperation(Account accountOperation){
         boolean save = true;
         Message message = new Message();
@@ -281,9 +314,22 @@ public class AccountService {
         return message;
     }
 
+    /**
+     * Metodo que permite realizar una operacion matematica
+     * @param currentAmount monto actual
+     * @param amount monto de saldo o credito
+     * @param mathOperation operacion matematica
+     * @return retorna un valor de tipo BidDecimal
+     */
     private BigDecimal operate(BigDecimal currentAmount, BigDecimal amount, MathOperation mathOperation){
         return mathOperation.operation(currentAmount,amount);
     }
+
+    /**
+     * Metodo que busca los movimientos de las cuentas por cliente
+     * @param account Objeto de la entidad Account
+     * @return retorna una lista historica de movimientos
+     */
     public List<AccountHistory> listMovements(Account account){
         List<Account> lstAccount = this.getAll();
         List<ClientProduct> lstClientProduct = this.clientProductFeignClient.listClientsProducts();
@@ -316,8 +362,8 @@ public class AccountService {
                         }
                 );
 
-        System.out.println("lstResultHistAccounts"+lstResultHistAccounts.get().size());
-        System.out.println("lstResultHistClientProduct"+lstResultHistClientProduct.get().size());
+        //System.out.println("lstResultHistAccounts"+lstResultHistAccounts.get().size());
+        //System.out.println("lstResultHistClientProduct"+lstResultHistClientProduct.get().size());
 
         List<AccountHistory> listAccountHistoryFlatMap = Stream.of(lstResultHistAccounts.get(),lstResultHistClientProduct.get())
                 .flatMap(List::stream)

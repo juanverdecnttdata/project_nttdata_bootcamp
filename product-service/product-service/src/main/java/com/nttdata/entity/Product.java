@@ -6,6 +6,9 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * Entidad de la tabla product
+ */
 @Entity
 public class Product {
     @Id

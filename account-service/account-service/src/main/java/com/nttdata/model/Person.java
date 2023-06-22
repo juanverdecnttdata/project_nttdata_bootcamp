@@ -1,12 +1,10 @@
 package com.nttdata.model;
 
-
-
-import com.nttdata.entity.Message;
-
 import javax.persistence.*;
 import java.util.Date;
-
+/**
+ * Entidad Person de la tabla person
+ */
 @Entity
 public class Person {
     @Id

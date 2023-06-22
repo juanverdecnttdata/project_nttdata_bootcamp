@@ -1,7 +1,9 @@
 package com.nttdata.entity;
 
 import java.math.BigDecimal;
-
+/**
+ * Entidad QueryBalance, usado para mostrar el saldo actual de las cuentas o productos de credito
+ */
 public class QueryBalance {
 
     private Long id_account;

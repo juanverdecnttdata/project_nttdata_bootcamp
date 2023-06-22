@@ -10,23 +10,41 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.function.Predicate;
 
+/**
+ * Clase Controller de la entidad Person
+ */
 @RestController
 @RequestMapping("/person")
 public class PersonController {
     @Autowired
     private PersonService personService;
 
+    /**
+     * Metodo que busca todas las personas
+     * @return retorna una lista de personas
+     */
     @GetMapping("/all")
     public ResponseEntity<List<Person>> listPersons(){
         List<Person> persons = personService.getAll();
         return ResponseEntity.ok(persons);
     }
+
+    /**
+     * Meotodo que busca una persona
+     * @param id Identificador de la entidad Person
+     * @return retorna un objeto de la entidad Person
+     */
     @GetMapping("/getPersonById/{id}")
-    public ResponseEntity<Person> getClientById(@PathVariable("id") Long id){
+    public ResponseEntity<Person> getPersonById(@PathVariable("id") Long id){
         Person person = personService.getPersonById(id);
         return ResponseEntity.ok(person);
     }
 
+    /**
+     * Metodo que realiza la insercion y actualizacion de la entidad Person
+     * @param person objeto de la entidad Person
+     * @return retorna la nueva entidad insertada o actualizada
+     */
     @PostMapping("/save")
     public ResponseEntity<Person> savePerson(@RequestBody Person person){
         Message message = new Message();

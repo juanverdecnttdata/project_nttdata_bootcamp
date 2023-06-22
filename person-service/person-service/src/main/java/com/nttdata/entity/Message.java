@@ -1,5 +1,8 @@
 package com.nttdata.entity;
 
+/**
+ * Entidad mensaje, usado para mostrarse en las peticiones rest
+ */
 public class Message {
     private String code;
     private String description;

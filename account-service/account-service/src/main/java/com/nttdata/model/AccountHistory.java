@@ -6,7 +6,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.Date;
-
+/**
+ * Entidad AccountHistory de la tabla account_history
+ */
 @Entity
 public class AccountHistory {
     @Id

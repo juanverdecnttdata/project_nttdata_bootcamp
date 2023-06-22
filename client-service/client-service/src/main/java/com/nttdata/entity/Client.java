@@ -4,7 +4,9 @@ package com.nttdata.entity;
 
 import javax.persistence.*;
 import java.util.Date;
-
+/**
+ * Entidad Client de la tabla client
+ */
 @Entity
 public class Client {
     @Id

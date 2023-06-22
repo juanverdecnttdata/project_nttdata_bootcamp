@@ -8,19 +8,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**
+ * Clase Controller de la entidad ClientProduct
+ */
 @RestController
 @RequestMapping("/clientProduct")
 public class ClientProductController {
     @Autowired
     private ClientProductService clientProductService;
-
+    /**
+     * Metodo que busca todos los datos de la entidad ClientProduct
+     * @return retorna una lista de la entidad ClientProduct
+     */
     @GetMapping("/all")
     public ResponseEntity<List<ClientProduct>> listClientsProducts(){
         List<ClientProduct> clientProducts = clientProductService.getAll();
         return ResponseEntity.ok(clientProducts);
     }
-
+    /**
+     * Metodo que realiza la insercion y actualizacion de la entidad ClientProduct
+     * @param clientProduct Objeto de la entidad ClientProduct
+     * @return retorna el objeto de la entidad ClientProduct insertado o actualizado
+     */
     @PostMapping("/save")
     public ResponseEntity<ClientProduct> saveClient(@RequestBody ClientProduct clientProduct){
         Message message = new Message();
@@ -28,7 +37,11 @@ public class ClientProductController {
         newClientProduct = clientProductService.save(clientProduct);
         return ResponseEntity.ok(newClientProduct);
     }
-
+    /**
+     * Meotodo que busca un cliente producto
+     * @param id Identificador de la entidad ClientProduct
+     * @return retorna un objeto de la entidad ClientProduct
+     */
     @GetMapping("/getClientProductById/{id}")
     public ResponseEntity<ClientProduct> getClientProductById(@PathVariable("id") Long id){
         ClientProduct clientProduct = clientProductService.getClientProductById(id);

@@ -7,7 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.util.Date;
-
+/**
+ * Entidad Product de la tabla product
+ */
 @Entity
 public class Product {
     @Id
