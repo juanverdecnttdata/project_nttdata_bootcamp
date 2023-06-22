@@ -1,40 +1,31 @@
-package com.nttdata.entity;
+package com.nttdata.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+
+import com.nttdata.entity.Message;
+
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class AccountDetail {
+public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_account_detail;
-    private Long id_account;
+    private Long id_client;
     private Long id_person;
-    private Integer holder /*(titular)*/;
-    private Integer authorized_signature;
     private Integer status;
+    private Long id_client_type;
     private Date creation_date;
     private String creation_terminal;
     private Date modification_date;
     private String modification_terminal;
 
-    public Long getId_account_detail() {
-        return id_account_detail;
+    public Long getId_client() {
+        return id_client;
     }
 
-    public void setId_account_detail(Long id_account_detail) {
-        this.id_account_detail = id_account_detail;
-    }
-
-    public Long getId_account() {
-        return id_account;
-    }
-
-    public void setId_account(Long id_account) {
-        this.id_account = id_account;
+    public void setId_client(Long id_client) {
+        this.id_client = id_client;
     }
 
     public Long getId_person() {
@@ -45,28 +36,20 @@ public class AccountDetail {
         this.id_person = id_person;
     }
 
-    public Integer getHolder() {
-        return holder;
-    }
-
-    public void setHolder(Integer holder) {
-        this.holder = holder;
-    }
-
-    public Integer getAuthorized_signature() {
-        return authorized_signature;
-    }
-
-    public void setAuthorized_signature(Integer authorized_signature) {
-        this.authorized_signature = authorized_signature;
-    }
-
     public Integer getStatus() {
         return status;
     }
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Long getId_client_type() {
+        return id_client_type;
+    }
+
+    public void setId_client_type(Long id_client_type) {
+        this.id_client_type = id_client_type;
     }
 
     public Date getCreation_date() {
@@ -100,4 +83,5 @@ public class AccountDetail {
     public void setModification_terminal(String modification_terminal) {
         this.modification_terminal = modification_terminal;
     }
+
 }

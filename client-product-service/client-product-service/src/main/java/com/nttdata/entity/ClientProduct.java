@@ -5,33 +5,47 @@ package com.nttdata.entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-public class Account {
+public class ClientProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_account;
+    private Long id_client_product;
     private Long id_client;
+    private Long id_product;
+    private Long id_account;
+    private BigDecimal credit_limit;
+    private BigDecimal credit;
     private Integer status;
     private Date creation_date;
     private String creation_terminal;
     private Date modification_date;
     private String modification_terminal;
-    private BigDecimal balance/* (saldo)*/;
-    private Long id_product;
     @Transient
     private Message message;
-    @Transient
-    private List<AccountDetail> accountDetail;
-    @Transient
-    private Long id_client_product;
-    @Transient
-    private Integer operation_type;
-    @Transient
-    private BigDecimal amount;
 
-    public Account() {
+    public Long getId_client_product() {
+        return id_client_product;
+    }
+
+    public void setId_client_product(Long id_client_product) {
+        this.id_client_product = id_client_product;
+    }
+
+    public Long getId_client() {
+        return id_client;
+    }
+
+    public void setId_client(Long id_client) {
+        this.id_client = id_client;
+    }
+
+    public Long getId_product() {
+        return id_product;
+    }
+
+    public void setId_product(Long id_product) {
+        this.id_product = id_product;
     }
 
     public Long getId_account() {
@@ -42,12 +56,20 @@ public class Account {
         this.id_account = id_account;
     }
 
-    public Long getId_client() {
-        return id_client;
+    public BigDecimal getCredit_limit() {
+        return credit_limit;
     }
 
-    public void setId_client(Long id_client) {
-        this.id_client = id_client;
+    public void setCredit_limit(BigDecimal credit_limit) {
+        this.credit_limit = credit_limit;
+    }
+
+    public BigDecimal getCredit() {
+        return credit;
+    }
+
+    public void setCredit(BigDecimal credit) {
+        this.credit = credit;
     }
 
     public Integer getStatus() {
@@ -90,61 +112,11 @@ public class Account {
         this.modification_terminal = modification_terminal;
     }
 
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    public Long getId_product() {
-        return id_product;
-    }
-
-    public void setId_product(Long id_product) {
-        this.id_product = id_product;
-    }
-
-    public List<AccountDetail> getAccountDetail() {
-        return accountDetail;
-    }
-
-    public void setAccountDetail(List<AccountDetail> accountDetail) {
-        this.accountDetail = accountDetail;
-    }
-
     public Message getMessage() {
         return message;
     }
 
     public void setMessage(Message message) {
         this.message = message;
-    }
-
-
-
-    public Integer getOperation_type() {
-        return operation_type;
-    }
-
-    public void setOperation_type(Integer operation_type) {
-        this.operation_type = operation_type;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public Long getId_client_product() {
-        return id_client_product;
-    }
-
-    public void setId_client_product(Long id_client_product) {
-        this.id_client_product = id_client_product;
     }
 }

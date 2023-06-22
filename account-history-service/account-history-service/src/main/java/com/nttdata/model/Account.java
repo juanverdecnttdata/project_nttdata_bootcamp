@@ -1,6 +1,8 @@
-package com.nttdata.entity;
+package com.nttdata.model;
 
 
+
+import com.nttdata.entity.Message;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -22,8 +24,6 @@ public class Account {
     private Long id_product;
     @Transient
     private Message message;
-    @Transient
-    private List<AccountDetail> accountDetail;
     @Transient
     private Long id_client_product;
     @Transient
@@ -104,14 +104,6 @@ public class Account {
 
     public void setId_product(Long id_product) {
         this.id_product = id_product;
-    }
-
-    public List<AccountDetail> getAccountDetail() {
-        return accountDetail;
-    }
-
-    public void setAccountDetail(List<AccountDetail> accountDetail) {
-        this.accountDetail = accountDetail;
     }
 
     public Message getMessage() {

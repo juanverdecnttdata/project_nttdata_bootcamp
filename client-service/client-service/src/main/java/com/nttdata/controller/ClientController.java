@@ -17,7 +17,7 @@ public class ClientController {
     private ClientService clientService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Client>> listPersons(){
+    public ResponseEntity<List<Client>> listClients(){
         List<Client> clients = clientService.getAll();
         return ResponseEntity.ok(clients);
     }

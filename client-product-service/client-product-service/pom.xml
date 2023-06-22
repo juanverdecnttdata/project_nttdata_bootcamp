@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.nttdata</groupId>
-	<artifactId>client-service</artifactId>
+	<artifactId>client-product-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>client-service</name>
+	<name>client-product-service</name>
 	<description>Project of the clientEntity</description>
 	<properties>
 		<java.version>11</java.version>
@@ -46,6 +46,11 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
 			<version>3.1.7</version>
+		</dependency>
+		<dependency>
+			<groupId>io.reactivex.rxjava3</groupId>
+			<artifactId>rxjava</artifactId>
+			<version>3.1.5</version>
 		</dependency>
 	</dependencies>
 
