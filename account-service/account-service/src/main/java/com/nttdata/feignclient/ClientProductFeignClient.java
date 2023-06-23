@@ -1,5 +1,6 @@
 package com.nttdata.feignclient;
 
+import com.nttdata.entity.Constant;
 import com.nttdata.model.AccountHistory;
 import com.nttdata.model.ClientProduct;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Clase FeingClient que se conecta al microservicio client-product-service
  */
-@FeignClient(name="client-product-service",path = "clientProduct", url = "http://localhost:8087")
+@FeignClient(name="client-product-service",path = "clientProduct", url = Constant.urlClientProduct)
 public interface ClientProductFeignClient {
     /**
      * Metodo que se conecta al servicio remoto obtiene la informacion de la entidad ClientProduct

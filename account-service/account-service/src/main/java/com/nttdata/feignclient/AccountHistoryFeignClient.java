@@ -1,23 +1,22 @@
 package com.nttdata.feignclient;
 
 import com.nttdata.entity.Account;
+import com.nttdata.entity.Constant;
 import com.nttdata.model.AccountHistory;
-import com.nttdata.model.Client;
 import com.nttdata.model.ClientProduct;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+
 
 /**
  * Clase FeingClient que se conecta al microservicio account-history-service
  */
-@FeignClient(name="account-history-service",path = "accountHistory", url = "http://localhost:8088")
+@FeignClient(name="account-history-service",path = "accountHistory", url = Constant.urlAccountHistory)
 public interface AccountHistoryFeignClient {
+
     /**
      * Metodo que se conecta al servicio remoto y guarda la informacion de la entidad AccountHistory
      * @param accountHistory Objeto de la entidad AccountHistory

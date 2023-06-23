@@ -15,7 +15,7 @@ public class Properties {
     @Autowired
     private Environment env;
 
-    public void getPropertyByName(String name) {
-        env.getProperty("name)");
+    public String getPropertyByName(String name) {
+        return env.getProperty("name");
     }
 }
