@@ -5,6 +5,8 @@ import com.nttdata.model.Product;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import reactor.core.publisher.Mono;
+
 /**
  * Clase FeingClient que se conecta al microservicio product-service
  */
@@ -16,5 +18,5 @@ public interface ProductFeignClient {
      * @return retorna un objeto de la entidad Product
      */
     @GetMapping("getProductById/{id}")
-    public Product getProductById(@RequestParam("id") Long id);
+    public Mono<Product> getProductById(@RequestParam("id") Long id);
 }

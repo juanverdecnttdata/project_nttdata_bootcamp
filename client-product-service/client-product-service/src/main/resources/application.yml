@@ -1,12 +1,6 @@
 server:
   port: 8087
 spring:
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
-  datasource:
-    hikari:
-      connection-timeout: 10000
-      maximum-pool-size: 10
-    password: 12345678
-    url: jdbc:postgresql://localhost:5432/bank
-    username: postgres
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/bank

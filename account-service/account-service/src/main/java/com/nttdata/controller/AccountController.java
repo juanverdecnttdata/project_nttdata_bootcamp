@@ -9,6 +9,8 @@ import com.nttdata.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 /**
@@ -17,17 +19,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/account")
 public class AccountController {
+
     @Autowired
     private AccountService accountService;
-
     /**
      * Metodo que busca todos los datos de la entidad Account
      * @return retorna una lista de la entidad Account
      */
     @GetMapping("/all")
-    public ResponseEntity<List<Account>> listAccounts(){
-        List<Account> accounts = accountService.getAll();
-        return ResponseEntity.ok(accounts);
+    public Flux<Account> listAccounts(){
+        return accountService.getAll();
     }
 
     /**
@@ -36,9 +37,8 @@ public class AccountController {
      * @return retorna el objeto de la entidad account insertado o actualizado
      */
     @PostMapping("/save")
-    public ResponseEntity<Account> saveAccount(@RequestBody Account account){
-        Account newAccount = accountService.save(account);
-        return ResponseEntity.ok(newAccount);
+    public Mono<Account> saveAccount(@RequestBody Account account){
+        return accountService.save(account);
     }
 
     /**
@@ -47,9 +47,9 @@ public class AccountController {
      * @return retorna un mensaje de confirmacion
      */
     @PostMapping("/operation")
-    public ResponseEntity<Message> operation(@RequestBody Account account){
-        Message message = accountService.doOperation(account);
-        return ResponseEntity.ok(message);
+    public Mono<Message> operation(@RequestBody Account account){
+        Mono<Message> message = accountService.doOperation(account);
+        return message;
     }
 
     /**
@@ -58,9 +58,8 @@ public class AccountController {
      * @return retorna una lista de la entidad QueryBalance
      */
     @PostMapping("/availableBalanceAccount")
-    public ResponseEntity<List<QueryBalance>> availableBalanceAccount(@RequestBody Account account){
-        List<QueryBalance> lstQueryBalance = accountService.availableBalanceAccount(account.getId_client());
-        return ResponseEntity.ok(lstQueryBalance);
+    public Flux<QueryBalance> availableBalanceAccount(@RequestBody Account account){
+        return accountService.availableBalanceAccount(account.getId_client());
     }
     /**
      * Metodo que busca los datos client product y muestra el credito actual de ellas
@@ -68,9 +67,8 @@ public class AccountController {
      * @return retorna una lista de la entidad QueryBalance
      */
     @PostMapping("/availableClientProduct")
-    public ResponseEntity<List<QueryBalance>> availableClientProduct(@RequestBody ClientProduct clientProduct){
-        List<QueryBalance> lstQueryBalance = accountService.listClientsProducts(clientProduct.getId_client());
-        return ResponseEntity.ok(lstQueryBalance);
+    public Flux<QueryBalance> availableClientProduct(@RequestBody ClientProduct clientProduct){
+        return accountService.listClientsProducts(clientProduct.getId_client());
     }
 
     /**
@@ -79,8 +77,7 @@ public class AccountController {
      * @return retorna una lista historica de movimientos
      */
     @PostMapping("/listMovements")
-    public ResponseEntity<List<AccountHistory>> listMovements(@RequestBody Account account){
-        List<AccountHistory> lstAccountHistory = accountService.listMovements(account);
-        return ResponseEntity.ok(lstAccountHistory);
+    public Flux<AccountHistory> listMovements(@RequestBody Account account){
+        return accountService.listMovements(account);
     }
 }

@@ -4,14 +4,13 @@ import com.nttdata.entity.AccountHistory;
 import com.nttdata.model.Account;
 import com.nttdata.model.ClientProduct;
 import com.nttdata.service.AccountHistoryService;
-import io.reactivex.rxjava3.core.Observable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 /**
  * Clase Controller de la entidad AccountHistory
@@ -26,9 +25,8 @@ public class AccountHistoryController {
      * @return retorna un objeto de la entidad AccountHistory
      */
     @GetMapping("/all")
-    public ResponseEntity<List<AccountHistory>> listAccountsHistory(){
-        List<AccountHistory> accountsHistory = accountHistoryService.getAll();
-        return ResponseEntity.ok(accountsHistory);
+    public Flux<AccountHistory> listAccountsHistory(){
+        return accountHistoryService.getAll();
     }
     /**
      * Metodo que guarda la informacion de la entidad AccountHistory
@@ -36,9 +34,8 @@ public class AccountHistoryController {
      * @return retorna el objeto insertado o actualizado
      */
     @PostMapping("/save")
-    public ResponseEntity<AccountHistory> saveAccountHistory(@RequestBody AccountHistory accountHistory){
-        AccountHistory newAccountHistoryRepository = accountHistoryService.save(accountHistory);
-        return ResponseEntity.ok(newAccountHistoryRepository);
+    public Mono<AccountHistory> saveAccountHistory(@RequestBody AccountHistory accountHistory){
+        return accountHistoryService.save(accountHistory);
     }
     /**
      * Metodo que obtiene los datos por cuenta
@@ -46,20 +43,19 @@ public class AccountHistoryController {
      * @return retorna el objeto insertado o actualizado
      */
     @PostMapping("/listAccountHistoryByAccount")
-    public ResponseEntity<List<AccountHistory>> listAccountHistoryByAccount(@RequestBody List<Account> account){
-        List<AccountHistory> accountsHistory = accountHistoryService.getAll();
-        AtomicReference<List<AccountHistory>> newAccountsHistory = new AtomicReference<>(accountHistoryService.getAll());
+    public Flux<AccountHistory> listAccountHistoryByAccount(@RequestBody List<Account> account){
+        Flux<AccountHistory> accountsHistory = accountHistoryService.getAll();
+        List<AccountHistory> newAccountsHistory = new ArrayList<AccountHistory>();
 
-        Observable<AccountHistory> productsObservable = Observable.fromIterable(accountsHistory);
-        productsObservable
-                .filter(accountHistory -> account.stream().noneMatch(compare -> compare.getId_account().equals(accountHistory.getId_account())))
+        accountsHistory
+                .filter(accountHistory -> account.stream().noneMatch(compare -> compare.getId().equals(accountHistory.getId_account())))
                 .collect(Collectors.toList())
                 .subscribe(
-                        accountTmp -> newAccountsHistory.set(accountTmp),
+                        accountTmp -> newAccountsHistory.addAll(accountTmp),
                         error -> System.out.println("error " + error.getMessage())
                 );
         //System.out.println(newAccountsHistory.get().size());
-        return ResponseEntity.ok(newAccountsHistory.get());
+        return Flux.fromIterable(newAccountsHistory);
     }
     /**
      * Metodo que obtiene los datos por cliente-producto
@@ -67,18 +63,17 @@ public class AccountHistoryController {
      * @return retorna el objeto insertado o actualizado
      */
     @PostMapping("/listAccountHistoryByClientProduct")
-    public ResponseEntity<List<AccountHistory>> listAccountHistoryByClientProduct(@RequestBody List<ClientProduct> clientProducts){
-        List<AccountHistory> accountsHistory = accountHistoryService.getAll();
-        AtomicReference<List<AccountHistory>> newAccountsHistory = new AtomicReference<>(new ArrayList<AccountHistory>());
-        Observable<AccountHistory> productsObservable = Observable.fromIterable(accountsHistory);
-        productsObservable
-                .filter(accountHistory -> clientProducts.stream().noneMatch(compare -> compare.getId_client_product().equals(accountHistory.getId_client_product())))
+    public Flux<AccountHistory> listAccountHistoryByClientProduct(@RequestBody List<ClientProduct> clientProducts){
+        Flux<AccountHistory> accountsHistory = accountHistoryService.getAll();
+        List<AccountHistory> newAccountsHistory = new ArrayList<AccountHistory>();
+        accountsHistory
+                .filter(accountHistory -> clientProducts.stream().noneMatch(compare -> compare.getId().equals(accountHistory.getId_client_product())))
                 .collect(Collectors.toList())
                 .subscribe(
-                        clientProductTmp -> newAccountsHistory.set(clientProductTmp),
+                        clientProductTmp -> newAccountsHistory.addAll(clientProductTmp),
                         error -> System.out.println("error " + error.getMessage())
                 );
-        //System.out.println(newAccountsHistory.get().size());
-        return ResponseEntity.ok(newAccountsHistory.get());
+        System.out.println(newAccountsHistory.size());
+        return Flux.fromIterable(newAccountsHistory);
     }
 }

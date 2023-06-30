@@ -9,6 +9,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 
 import static com.nttdata.entity.Person.SEQUENCE_NAME;
@@ -19,6 +20,8 @@ import static com.nttdata.entity.Person.SEQUENCE_NAME;
 @Service
 public class PersonService {
 
+    @Autowired
+    private SequenceGeneratorService sequenceGeneratorService;
 
     @Autowired
     private PersonRepository personRepository;
@@ -35,7 +38,7 @@ public class PersonService {
      * @return retorna un objeto de la entidad Person
      */
     public Mono<Person> getPersonById(Long id){
-        return personRepository.findById(id).doOnError(null);
+        return personRepository.findById(id);
     }
     /**
      * Metodo que realiza la insercion y actualizacion de la entidad Person
@@ -43,7 +46,28 @@ public class PersonService {
      * @return retorna la nueva entidad insertada o actualizada
      */
     public Mono<Person> save(Person person) {
-        return personRepository.save(person);
+        Message message = new Message();
+        Person newPerson = new Person();
+
+        Predicate<Person> isLegalAge = person1 -> person1.getAge() < 18;
+        if (isLegalAge.test(person)) {
+            message.setCode("999");
+            message.setCode("The person needs to have 18 years or more");
+            newPerson.setMessage(message);
+        } else {
+            person.setId(sequenceGeneratorService.getSequenceNumber(Person.SEQUENCE_NAME));
+            try {
+                newPerson = personRepository.save(person).toFuture().get();
+                message = new Message("001", "Person created");
+                newPerson.setMessage(message);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return Mono.just(newPerson);
+
     }
 
 }

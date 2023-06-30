@@ -10,8 +10,11 @@ import com.nttdata.model.Product;
 import com.nttdata.repository.ClientProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 /**
  * Servicio de la entidad ClientProduct para acceder al repository
@@ -21,17 +24,19 @@ public class ClientProductService {
 
     @Autowired
     private ClientProductRepository clientProductRepository;
-
+    @Autowired
+    private SequenceGeneratorService sequenceGeneratorService;
     @Autowired
     private ClientFeignClient clientFeignClient;
 
     @Autowired
     private ProductFeignClient productFeignClient;
+
     /**
      * Metodo que busca todos los datos de la entidad ClientProduct
      * @return retorna una lista de la entidad ClientProduct
      */
-    public List<ClientProduct> getAll(){
+    public Flux<ClientProduct> getAll(){
         return clientProductRepository.findAll();
     }
     /**
@@ -39,15 +44,15 @@ public class ClientProductService {
      * @param id Identificador de la entidad ClientProduct
      * @return retorna un objeto de la entidad ClientProduct
      */
-    public ClientProduct getClientProductById(Long id){
-        return clientProductRepository.findById(id).orElse(null);
+    public Mono<ClientProduct> getClientProductById(Long id){
+        return clientProductRepository.findById(id);
     }
     /**
      * Metodo que realiza la insercion y actualizacion de la entidad ClientProduct
      * @param clientProduct Objeto de la entidad ClientProduct
      * @return retorna el objeto de la entidad ClientProduct insertado o actualizado
      */
-    public ClientProduct save(ClientProduct clientProduct) {
+    public Mono<ClientProduct> save(ClientProduct clientProduct) {
         boolean save = true;
         Message message= new Message();
         ClientProduct newClientProduct = new ClientProduct();
@@ -77,11 +82,18 @@ public class ClientProductService {
             save = false;
         }
         if (save){
+            clientProduct.setId(sequenceGeneratorService.getSequenceNumber(ClientProduct.SEQUENCE_NAME));
             message = new Message("001", "Client product created");
-            newClientProduct = clientProductRepository.save(clientProduct);
+            try {
+                newClientProduct = clientProductRepository.save(clientProduct).toFuture().get();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
             newClientProduct.setMessage(message);
         }
-        return newClientProduct;
+        return Mono.just(newClientProduct);
     }
 
 }

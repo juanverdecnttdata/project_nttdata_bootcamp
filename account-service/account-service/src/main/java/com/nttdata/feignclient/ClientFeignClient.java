@@ -2,14 +2,18 @@ package com.nttdata.feignclient;
 
 import com.nttdata.entity.Constant;
 import com.nttdata.model.Client;
-import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import reactivefeign.spring.config.ReactiveFeignAutoConfiguration;
+import reactivefeign.spring.config.ReactiveFeignClient;
+import reactor.core.publisher.Mono;
+
 /**
  * Clase FeingClient que se conecta al microservicio client-service
  */
-@FeignClient(name="client-service",path = "/client", url = Constant.urlClient)
+@ReactiveFeignClient(name="client-service",path = "/client", url = Constant.urlClient)
 public interface ClientFeignClient {
     /**
      * Metodo que se conecta al servicio remoto y obtiene informacion de la entidad Client
@@ -17,5 +21,5 @@ public interface ClientFeignClient {
      * @return retorna un objeto de la entidad Client
      */
     @GetMapping("/getClientById/{id}")
-    public Client getClientById(@RequestParam("id") Long id);
+    public Mono<Client> getClientById(@RequestParam("id") Long id);
 }

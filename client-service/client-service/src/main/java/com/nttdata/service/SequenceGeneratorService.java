@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutionException;
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
+
 /**
  * Servicio de la entidad Sequence, sirve para generar el id automatico de las colecciones
  */

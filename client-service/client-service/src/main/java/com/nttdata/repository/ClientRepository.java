@@ -1,9 +1,12 @@
 package com.nttdata.repository;
 
 import com.nttdata.entity.Client;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import org.springframework.stereotype.Repository;
+
 /**
  * Clase repositorio de la entidad Client
  */
-public interface ClientRepository extends JpaRepository<Client, Long> {
+@Repository
+public interface ClientRepository extends ReactiveMongoRepository<Client, Long> {
 }

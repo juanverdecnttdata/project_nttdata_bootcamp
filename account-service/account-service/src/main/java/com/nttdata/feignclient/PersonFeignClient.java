@@ -5,6 +5,8 @@ import com.nttdata.model.Person;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import reactor.core.publisher.Mono;
+
 /**
  * Clase FeingClient que se conecta al microservicio person-service
  */
@@ -16,5 +18,5 @@ public interface PersonFeignClient {
      * @return retorna un objeto de la entidad Person
      */
     @GetMapping("getPersonById/{id}")
-    public Person getPersonById(@RequestParam("id") Long id);
+    public Mono<Person> getPersonById(@RequestParam("id") Long id);
 }

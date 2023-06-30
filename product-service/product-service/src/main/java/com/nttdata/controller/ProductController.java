@@ -5,6 +5,8 @@ import com.nttdata.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -22,19 +24,16 @@ public class ProductController {
      * @return lista de la entidad product
      */
     @GetMapping("/all")
-    public ResponseEntity<List<Product>> listProduct(){
-        List<Product> product = productService.getAll();
-        return ResponseEntity.ok(product);
+    public Flux<Product> listProduct(){
+        return productService.getAll();
     }
-
     /**
      * Metodo que retorna una una entidad de product
      * @param id Identificador del producto
      * @return Retorna una entidad producto
      */
     @GetMapping("/getProductById/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id){
-        Product product = productService.getProductById(id);
-        return ResponseEntity.ok(product);
+    public Mono<Product> getProductById(@PathVariable("id") Long id){
+        return productService.getProductById(id);
     }
 }

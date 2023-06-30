@@ -12,9 +12,12 @@ import com.nttdata.repository.AccountRepository;
 import io.reactivex.rxjava3.core.Observable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -30,27 +33,29 @@ public class AccountService {
 
     @Autowired
     private AccountDetailRepository accountDetailRepository;
-
-    @Autowired
+ 
     private ClientFeignClient clientFeignClient;
 
-    @Autowired
+
     private ProductFeignClient productFeignClient;
 
-    @Autowired
+
     private PersonFeignClient personFeignClient;
 
-    @Autowired
+
     private ClientProductFeignClient clientProductFeignClient;
 
-    @Autowired
+
     private AccountHistoryFeignClient accountHistoryFeignClient;
+
+    @Autowired
+    private SequenceGeneratorService sequenceGeneratorService;
 
     /**
      * Metodo que busca todas los datos de la entidad Account
      * @return retorna una lista de objetos de la entidad Account
      */
-    public List<Account> getAll(){
+    public Flux<Account> getAll(){
         return accountRepository.findAll();
     }
 
@@ -59,11 +64,11 @@ public class AccountService {
      * @param id_client Identificador de la entidad Account
      * @return retorna una lista de la entidad QueryBalance
      */
-    public List<QueryBalance> availableBalanceAccount(Long id_client){
-        List<Account> lstAccount = this.getAll();
+    public Flux<QueryBalance> availableBalanceAccount(Long id_client){
+        Flux<Account> lstAccount = this.getAll();
         List<QueryBalance> lstQueryBalance = new ArrayList<QueryBalance>();
 
-        Observable<Account> accountObservable = Observable.fromIterable(lstAccount);
+        Observable<Account> accountObservable = Observable.fromIterable(lstAccount.toIterable());
         accountObservable
                 .filter(account -> account.getId_client() == id_client)
                 .map(account -> account.getBalance())
@@ -72,19 +77,18 @@ public class AccountService {
                         error -> System.out.println("error " + error.getMessage()),
                         () -> System.out.println("finaliza observable")
                 );
-        return lstQueryBalance;
+        return Flux.fromIterable(lstQueryBalance);
     }
     /**
      * Metodo que busca los datos client product y muestra el credito actual de ellas
      * @param idClient Identificador de la entidad ClientProduct
      * @return retorna una lista de la entidad QueryBalance
      */
-    public List<QueryBalance> listClientsProducts(Long idClient){
-        List<ClientProduct> lstClientProduct = clientProductFeignClient.listClientsProducts();
+    public Flux<QueryBalance> listClientsProducts(Long idClient){
+        Flux<ClientProduct> lstClientProduct = clientProductFeignClient.listClientsProducts();
         List<QueryBalance> lstQueryBalance = new ArrayList<QueryBalance>();
 
-        Observable<ClientProduct> productsObservable = Observable.fromIterable(lstClientProduct);
-        productsObservable
+        lstClientProduct
                 .filter(clientProduct -> clientProduct.getId_client() == idClient)
                 .map(clientProduct -> clientProduct.getCredit())
                 .subscribe(
@@ -92,7 +96,7 @@ public class AccountService {
                         error -> System.out.println("error " + error.getMessage()),
                         () -> System.out.println("finaliza")
                 );
-        return lstQueryBalance;
+        return Flux.fromIterable(lstQueryBalance);
     }
 
     /**
@@ -100,9 +104,16 @@ public class AccountService {
      * @param id Identificador de la entidad Account
      * @return retorna un objeto del tipo Account
      */
-    public Account getAccountById(Long id){
-        Account account = accountRepository.findById(id).orElse(null);
-        account.setAccountDetail(accountDetailRepository.findAccountDetailByAccount(account.getId_account()));
+    public Mono<Account> getAccountById(Long id){
+        Mono<Account> account = accountRepository.findById(id);
+        try {
+            System.out.println("id " + account.block().getId());
+            account.toFuture().get().setAccountDetail(accountDetailRepository.findAccountDetailByAccount(account.block().getId()));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
         return account;
     }
 
@@ -111,20 +122,28 @@ public class AccountService {
      * @param account Objeto de la entidad Account
      * @return retorna el objeto de la entidad account insertado o actualizado
      */
-    public Account save(Account account) {
+    public Mono<Account> save(Account account) {
         boolean save = true;
         Message message = new Message();
         Account newAccount = new Account();
+        try {
+        Flux<Account> listAccount= accountRepository.findAll();
+        Flux<Account> listAccountSearched = listAccount.filter(accountFilter -> accountFilter.getId_client() == account.getId_client())/*.collect(Collectors.toList())*/;
 
-        List<Account> listAccount= this.getAll();
-        List<Account> listAccountSearched = listAccount.stream().filter(accountFilter -> accountFilter.getId_client() == account.getId_client()).collect(Collectors.toList());
-
-        Client client = clientFeignClient.getClientById(account.getId_client());
-        Product product = productFeignClient.getProductById(account.getId_product());
+        Mono<Client> client = clientFeignClient.getClientById(account.getId_client());
+        Product product = productFeignClient.getProductById(account.getId_product()).toFuture().get();
 
         List<AccountDetail> lPersonDoesntExist = this.checkIfPersonNotExists(account.getAccountDetail());
         Predicate<List<AccountDetail>> lPersonDoesntExistTest = aDetail -> !aDetail.isEmpty() && aDetail.size() > 0;
-        Predicate<List<Account>> hasOneOrMoreAccount = accounts -> !accounts.isEmpty() && accounts.size() > 0;
+        Predicate<Flux<Account>> hasOneOrMoreAccount = accounts -> {
+            try {
+                return !accounts.collectList().toFuture().get().isEmpty() && accounts.collectList().toFuture().get().size() > 0;
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        };
         Predicate<Client> existClient = eClient -> eClient == null;
         Predicate<Product> existProduct = eProduct -> eProduct == null;
         Predicate<Person> existPerson = ePerson -> ePerson == null;
@@ -135,7 +154,7 @@ public class AccountService {
         List<AccountDetail> lstAccountHasAuthoridedSigner = account.getAccountDetail().stream().filter(authorized_signer -> authorized_signer.getAuthorized_signature() == 1).collect(Collectors.toList());
         Predicate<List<AccountDetail>> hasAutoridedSigner = isActive -> isActive.isEmpty() && isActive.size() == 0;
         Predicate<Account> accountEmpType = isAccPersonalType -> isAccPersonalType.getId_product() != 2;
-        if (existProduct.test(product)){
+        /*if (existProduct.test(product)){
             message.setCode("002");
             message.setDescription("The product doesnt exist");
             newAccount.setMessage(message);
@@ -176,23 +195,30 @@ public class AccountService {
                 newAccount.setMessage(message);
                 save = false;
             }
-        }
+        }*/
 
         if (save){
 
             message = new Message("001", "Account created");
-            newAccount = accountRepository.save(account);
+            account.setId(sequenceGeneratorService.getSequenceNumber(Account.SEQUENCE_NAME));
+            newAccount = accountRepository.save(account).toFuture().get();
             newAccount.setMessage(message);
-            Long idAccountTmp = newAccount.getId_account();
+            Long idAccountTmp = newAccount.getId();
 
              Predicate<Long> existId = (i) -> i > 0;
-             if (existId.test(newAccount.getId_account())){
+             if (existId.test(newAccount.getId())){
                  List<AccountDetail> listAccountDetail = account.getAccountDetail().stream().map(accountDetail -> {accountDetail.setId_account(idAccountTmp); return accountDetail;}).collect(Collectors.toList());
                  listAccountDetail.forEach((x) -> accountDetailRepository.save(x));
              }
-             newAccount = this.getAccountById(idAccountTmp);
+             newAccount = this.getAccountById(idAccountTmp).toFuture().get();
+
         }
-        return newAccount;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+        return Mono.just(newAccount);
     }
     /**
      * Metodo que verifica si la persona existe
@@ -202,7 +228,14 @@ public class AccountService {
     private List<AccountDetail> checkIfPersonNotExists(List<AccountDetail> lstAccountOrigin){
         List<AccountDetail> listNotExistPerson = new ArrayList<AccountDetail>();
         lstAccountOrigin.forEach((x) -> {
-            Person person = personFeignClient.getPersonById(x.getId_person());
+            Person person = null;
+            try {
+                person = personFeignClient.getPersonById(x.getId_person()).toFuture().get();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
             if (person==null){
                 listNotExistPerson.add(x);
             }
@@ -215,11 +248,11 @@ public class AccountService {
      * @param accountOperation objeto de la entidad Account
      * @return retorna un mensaje de operacion
      */
-    public Message doOperation(Account accountOperation){
+    public Mono<Message> doOperation(Account accountOperation){
         boolean save = true;
         Message message = new Message();
-        if (accountOperation.getId_account() != null){
-            Optional<Account> account =accountRepository.findById(accountOperation.getId_account());
+        if (accountOperation.getId() != null){
+            Optional<Account> account = accountRepository.findById(accountOperation.getId()).blockOptional();
             if (account.isPresent()){
                 AccountHistory accountHistory = new AccountHistory();
                 AccountHistory accountHistoryUpdated = new AccountHistory();
@@ -242,22 +275,28 @@ public class AccountService {
 
                 if (save){
                     accountHistory.setAmount(accountOperation.getAmount());
-                    accountHistory.setId_account(accountOperation.getId_account());
+                    accountHistory.setId_account(accountOperation.getId());
                     accountHistory.setId_client_product(accountOperation.getId_client_product());
                     accountHistory.setStatus(1);
                     accountHistory.setOperation_date(new Date());
                     accountHistory.setOperation_terminal(accountOperation.getModification_terminal());
                     accountHistory.setOperation_type(accountOperation.getOperation_type());
                     account.get().setBalance(amountUpdated);
-                    Account accountUpdated = accountRepository.save(account.get());
-                    accountHistoryUpdated = accountHistoryFeignClient.save(accountHistory);
+                    Account accountUpdated = accountRepository.save(account.get()).block();
+                    try {
+                        accountHistoryUpdated = accountHistoryFeignClient.save(accountHistory).toFuture().get();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    } catch (ExecutionException e) {
+                        throw new RuntimeException(e);
+                    }
                     message = new Message("001", "Operation performed successfully");
                 }
             } else {
                 message = new Message("002", "The client doesnt exist");
             }
         } else if (accountOperation.getId_client_product() != null){
-            Optional<ClientProduct> clientProduct = Optional.ofNullable(clientProductFeignClient.getClientProductById(accountOperation.getId_client_product()));
+            Optional<ClientProduct> clientProduct = Optional.ofNullable(clientProductFeignClient.getClientProductById(accountOperation.getId_client_product()).block());
             if(clientProduct.isPresent()){
                 AccountHistory accountHistory = new AccountHistory();
                 AccountHistory accountHistoryUpdated = new AccountHistory();
@@ -293,15 +332,21 @@ public class AccountService {
                 }
                 if (save){
                     accountHistory.setAmount(accountOperation.getAmount());
-                    accountHistory.setId_account(accountOperation.getId_account());
+                    accountHistory.setId_account(accountOperation.getId());
                     accountHistory.setId_client_product(accountOperation.getId_client_product());
                     accountHistory.setStatus(1);
                     accountHistory.setOperation_date(new Date());
                     accountHistory.setOperation_terminal(accountOperation.getModification_terminal());
                     accountHistory.setOperation_type(accountOperation.getOperation_type());
                     clientProduct.get().setCredit(amountUpdated);
-                    ClientProduct clientProductUpdated = clientProductFeignClient.save(clientProduct.get());
-                    accountHistoryUpdated = accountHistoryFeignClient.save(accountHistory);
+                    ClientProduct clientProductUpdated = clientProductFeignClient.save(clientProduct.get()).block();
+                    try {
+                        accountHistoryUpdated = accountHistoryFeignClient.save(accountHistory).toFuture().get();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    } catch (ExecutionException e) {
+                        throw new RuntimeException(e);
+                    }
                     message = new Message("001", "Operation performed successfully");
                 }
 
@@ -311,7 +356,7 @@ public class AccountService {
         }
 
 
-        return message;
+        return Mono.just(message);
     }
 
     /**
@@ -330,34 +375,32 @@ public class AccountService {
      * @param account Objeto de la entidad Account
      * @return retorna una lista historica de movimientos
      */
-    public List<AccountHistory> listMovements(Account account){
-        List<Account> lstAccount = this.getAll();
-        List<ClientProduct> lstClientProduct = this.clientProductFeignClient.listClientsProducts();
+    public Flux<AccountHistory> listMovements(Account account){
+        Flux<Account> lstAccount = this.getAll();
+        Flux<ClientProduct> lstClientProduct = this.clientProductFeignClient.listClientsProducts();
         List<Account> lstAccountResult = new ArrayList<Account>();
         List<ClientProduct> lstClientProductResult = new ArrayList<ClientProduct>();
         AtomicReference<List<AccountHistory>> lstResultHistAccounts = new AtomicReference<>(new ArrayList<AccountHistory>());
         AtomicReference<List<AccountHistory>> lstResultHistClientProduct = new AtomicReference<>(new ArrayList<AccountHistory>());
 
-        Observable<Account> accountObservable = Observable.fromIterable(lstAccount);
-        accountObservable
+        lstAccount
                 .filter(acccount0 -> acccount0.getId_client() == account.getId_client())
                 .subscribe(
                         accountTmp -> lstAccountResult.add(accountTmp),
                         error -> System.out.println("error " + error.getMessage()),
                         () -> {
-                            lstResultHistAccounts.set(accountHistoryFeignClient.listAccountHistoryByAccount(lstAccountResult));
+                            lstResultHistAccounts.set((List<AccountHistory>) accountHistoryFeignClient.listAccountHistoryByAccount(lstAccountResult));
                             System.out.println("finalizo la consulta al microservicio accountHistoryFeignClient listAccountHistoryByAccount");
                         }
                 );
 
-        Observable<ClientProduct> clientProductObservable = Observable.fromIterable(lstClientProduct);
-        clientProductObservable
+        lstClientProduct
                 .filter(clientProduct -> clientProduct.getId_client() == account.getId_client())
                 .subscribe(
                         clientProductTmp -> lstClientProductResult.add(clientProductTmp),
                         error -> System.out.println("error " + error.getMessage()),
                         () -> {
-                            lstResultHistClientProduct.set(accountHistoryFeignClient.listAccountHistoryByClientProduct(lstClientProductResult));
+                            lstResultHistClientProduct.set((List<AccountHistory>) accountHistoryFeignClient.listAccountHistoryByClientProduct(lstClientProductResult));
                             System.out.println("finalizo la consulta al microservicio accountHistoryFeignClient listAccountHistoryByClientProduct");
                         }
                 );
@@ -369,7 +412,7 @@ public class AccountService {
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
         System.out.println("lstResultHistClientProduct"+listAccountHistoryFlatMap.size());
-        return listAccountHistoryFlatMap;
+        return Flux.fromIterable(listAccountHistoryFlatMap);
     }
 
 }

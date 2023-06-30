@@ -4,6 +4,8 @@ import com.nttdata.entity.Product;
 import com.nttdata.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -20,14 +22,14 @@ public class ProductService {
      * Metodo que busca todos los productos
      * @return retorna una lista de productos
      */
-    public List<Product> getAll(){
+    public Flux<Product> getAll(){
         return productRepository.findAll();
     }
     /**
      * Metodo que busca una entidad de producto
      * @return retorna una entidad producto
      */
-    public Product getProductById(Long id){
-        return productRepository.findById(id).orElse(null);
+    public Mono<Product> getProductById(Long id){
+        return productRepository.findById(id);
     }
 }

@@ -7,6 +7,8 @@ import com.nttdata.model.ClientProduct;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -23,19 +25,19 @@ public interface AccountHistoryFeignClient {
      * @return retorna el objeto insertado o actualizado
      */
     @PostMapping("/save")
-    public AccountHistory save(@RequestBody AccountHistory accountHistory);
+    public Mono<AccountHistory> save(@RequestBody AccountHistory accountHistory);
     /**
      * Metodo que se conecta al servicio remoto y obtiene los datos por cuenta
      * @param lstAccount lista de objetos de la entidad Account
      * @return retorna el objeto insertado o actualizado
      */
     @PostMapping("/listAccountHistoryByAccount")
-    public List<AccountHistory> listAccountHistoryByAccount(@RequestBody List<Account> lstAccount);
+    public Flux<AccountHistory> listAccountHistoryByAccount(@RequestBody List<Account> lstAccount);
     /**
      * Metodo que se conecta al servicio remoto y obtiene los datos por cliente-producto
      * @param clientProducts lista de objetos de la entidad ClientProduct
      * @return retorna el objeto insertado o actualizado
      */
     @PostMapping("/listAccountHistoryByClientProduct")
-    public List<AccountHistory> listAccountHistoryByClientProduct(@RequestBody List<ClientProduct> clientProducts);
+    public Flux<AccountHistory> listAccountHistoryByClientProduct(@RequestBody List<ClientProduct> clientProducts);
 }
