@@ -2,11 +2,8 @@ package com.nttdata.feignclient;
 
 import com.nttdata.entity.Constant;
 import com.nttdata.model.Client;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import reactivefeign.spring.config.ReactiveFeignAutoConfiguration;
 import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Mono;
 

@@ -13,7 +13,6 @@ import io.reactivex.rxjava3.core.Observable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -33,8 +32,8 @@ public class AccountService {
 
     @Autowired
     private AccountDetailRepository accountDetailRepository;
- 
-    private ClientFeignClient clientFeignClient;
+
+    ClientFeignClient clientFeignClient;
 
 
     private ProductFeignClient productFeignClient;

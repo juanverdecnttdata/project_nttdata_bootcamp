@@ -1,0 +1,622 @@
+---
+openapi: 3.0.0
+info:
+  title: Botcamp_project_43
+  description: The api for the bootcamp project
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/JUANCARLOSVERDECORTE/ProjectBootcamp_43/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: https://virtserver.swaggerhub.com/JUANCARLOSVERDECORTE/product/1.0.0
+  description: Design first for the bootcamp application
+paths:
+  /product:
+    get:
+      tags:
+      - Product
+      description: returns all registered products
+      operationId: allProducts
+      responses:
+        "200":
+          description: All the products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  /product/all:
+    get:
+      tags:
+      - Product
+      description: returns all registered products
+      operationId: allProduct
+      responses:
+        "200":
+          description: All the products
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+  /product/getProductById/{id}:
+    get:
+      tags:
+      - Product
+      description: returns all registered products
+      operationId: getProductById
+      parameters:
+      - name: id
+        in: path
+        description: The Id of the product
+        required: true
+        style: simple
+        explode: true
+        schema:
+          type: string
+          default: "0"
+      responses:
+        "200":
+          description: All the products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+  /person:
+    get:
+      tags:
+      - Person
+      operationId: allPersons
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+      x-swagger-router-controller: ZWave
+  /person/getPersonById/{id}:
+    get:
+      tags:
+      - Person
+      operationId: getPersonById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: the person encountered by the id provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+  /person/save:
+    post:
+      tags:
+      - Person
+      description: This method create a new Person
+      operationId: savePerson
+      requestBody:
+        description: create a new Person
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+      responses:
+        "200":
+          description: person created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+  /client:
+    get:
+      tags:
+      - Client
+      description: returns all registered clients
+      operationId: allClients
+      responses:
+        "200":
+          description: All the clients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+  /client/all:
+    get:
+      tags:
+      - Client
+      description: returns all registered clients
+      operationId: allClient
+      responses:
+        "200":
+          description: All the clients
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+  /client/getClientById/{id}:
+    get:
+      tags:
+      - Client
+      description: return a especific client
+      operationId: getClientById
+      parameters:
+      - name: id
+        in: path
+        description: The Id of the client
+        required: true
+        style: simple
+        explode: true
+        schema:
+          type: string
+          default: "0"
+      responses:
+        "200":
+          description: The especified client encountered
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Client'
+  /client/save:
+    post:
+      tags:
+      - Client
+      description: This method create a new Client
+      operationId: saveClient
+      requestBody:
+        description: create a new Client
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Client'
+      responses:
+        "200":
+          description: client created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+  /clientProduct:
+    get:
+      tags:
+      - ClientProduct
+      operationId: allClientProduct
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientProduct'
+  /clientProduct/getClientProductById/{id}:
+    get:
+      tags:
+      - ClientProduct
+      operationId: getClientProductById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: the client-product encountered by the id provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientProduct'
+  /clientProduct/save:
+    post:
+      tags:
+      - ClientProduct
+      description: This method create a new Client-Product relation
+      operationId: saveClientProduct
+      requestBody:
+        description: create a new Client-Product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientProduct'
+      responses:
+        "200":
+          description: relation created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientProduct'
+  /accountHistory:
+    get:
+      tags:
+      - AccountHistory
+      operationId: allAccountHistory
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountHistory'
+  /accountHistory/save:
+    post:
+      tags:
+      - AccountHistory
+      description: This method create a new Account History
+      operationId: saveAccountHistory
+      requestBody:
+        description: create a new Client-Product
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountHistory'
+      responses:
+        "200":
+          description: relation created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientProduct'
+  /accountHistory/listAccountHistoryByAccount:
+    post:
+      tags:
+      - AccountHistory
+      description: This method list all account history with relation from account object
+      operationId: listAccountHistoryByAccount
+      requestBody:
+        description: List all account history from account object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        "200":
+          description: list of account history
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountHistory'
+  /accountHistory/listAccountHistoryByClientProduct:
+    post:
+      tags:
+      - AccountHistory
+      description: This method list all account history with relation from client-product object
+      operationId: listAccountHistoryByClientProduct
+      requestBody:
+        description: List all account history from client-product object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        "200":
+          description: list of account history
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountHistory'
+  /account:
+    get:
+      tags:
+      - Account
+      operationId: allAccount
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+  /account/save:
+    post:
+      tags:
+      - Account
+      description: This method create a new account
+      operationId: saveAccount
+      requestBody:
+        description: create a new account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        "200":
+          description: relation created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+  /account/operation:
+    post:
+      tags:
+      - Account
+      description: "Calculates deposit, withdrawal, payment or loading money to an account"
+      operationId: operation
+      requestBody:
+        description: Account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        "200":
+          description: calculate amounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+  /account/availableBalanceAccount:
+    post:
+      tags:
+      - Account
+      description: Get a object with the balance of an account
+      operationId: availableBalanceAccount
+      requestBody:
+        description: Account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        "200":
+          description: calculate amounts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryBalance'
+  /account/availableClientProduct:
+    post:
+      tags:
+      - Account
+      description: Get a object with the credit of an client product
+      operationId: availableClientProduct
+      requestBody:
+        description: Account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        "200":
+          description: show the current credit of a client
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryBalance'
+  /account/listMovements:
+    post:
+      tags:
+      - Account
+      description: Get all the movements of a account
+      operationId: listMovements
+      requestBody:
+        description: Account
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Account'
+      responses:
+        "200":
+          description: show the all the movements of an account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountHistory'
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        age:
+          type: integer
+          format: int32
+        gender:
+          type: integer
+          format: int32
+        status:
+          type: integer
+          format: int32
+        start_date:
+          type: string
+        creation_date:
+          type: string
+        creation_terminal:
+          type: string
+        modification_date:
+          type: string
+        modification_terminal:
+          type: string
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+        id_product_type:
+          type: integer
+        name:
+          type: string
+        status:
+          type: integer
+          format: int32
+        start_date:
+          type: string
+        creation_date:
+          type: string
+        creation_terminal:
+          type: string
+        modification_date:
+          type: string
+        modification_terminal:
+          type: string
+        comission_free_mainteance:
+          type: integer
+        n_movements:
+          type: integer
+        n_operation_month:
+          type: integer
+        free_movements:
+          type: integer
+        amount_maintenance:
+          type: number
+        free_operation_per_month:
+          type: integer
+    Client:
+      type: object
+      properties:
+        id:
+          type: integer
+        id_person:
+          type: integer
+        id_client_type:
+          type: integer
+        status:
+          type: integer
+          format: int32
+        creation_date:
+          type: string
+        creation_terminal:
+          type: string
+        modification_date:
+          type: string
+        modification_terminal:
+          type: string
+    ClientProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+        id_client:
+          type: integer
+        id_product:
+          type: integer
+        id_account:
+          type: integer
+        credit_limit:
+          type: number
+        credit:
+          type: number
+        status:
+          type: integer
+          format: int32
+        creation_date:
+          type: string
+        creation_terminal:
+          type: string
+        modification_date:
+          type: string
+        modification_terminal:
+          type: string
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+        id_client:
+          type: integer
+        status:
+          type: integer
+          format: int32
+        creation_date:
+          type: string
+        creation_terminal:
+          type: string
+        modification_date:
+          type: string
+        modification_terminal:
+          type: string
+        accountDetail:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountDetail'
+    AccountDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        id_account:
+          type: integer
+        id_person:
+          type: integer
+        holder:
+          type: integer
+        authorized_signature:
+          type: integer
+        status:
+          type: integer
+          format: int32
+        creation_date:
+          type: string
+        creation_terminal:
+          type: string
+        modification_date:
+          type: string
+        modification_terminal:
+          type: string
+    AccountHistory:
+      type: object
+      properties:
+        id:
+          type: integer
+        id_account:
+          type: integer
+        id_client_product:
+          type: integer
+        operation_type:
+          type: integer
+        amount:
+          type: number
+        status:
+          type: integer
+          format: int32
+        creation_date:
+          type: string
+        creation_terminal:
+          type: string
+        modification_date:
+          type: string
+        modification_terminal:
+          type: string
+    Message:
+      type: object
+      properties:
+        code:
+          type: integer
+        description:
+          type: string
+    QueryBalance:
+      type: object
+      properties:
+        id_account:
+          type: integer
+        id_client_product:
+          type: integer
+        balance:
+          type: number

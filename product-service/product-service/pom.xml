@@ -46,6 +46,11 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>checkstyle</groupId>
+			<artifactId>checkstyle</artifactId>
+			<version>5.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -1,16 +1,12 @@
 package com.nttdata.controller;
 
-import com.nttdata.entity.Message;
 import com.nttdata.entity.Person;
 import com.nttdata.service.PersonService;
-import com.nttdata.service.SequenceGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.concurrent.ExecutionException;
-import java.util.function.Predicate;
 
 /**
  * Clase Controller de la entidad Person
