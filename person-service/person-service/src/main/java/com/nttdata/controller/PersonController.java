@@ -2,10 +2,13 @@ package com.nttdata.controller;
 
 import com.nttdata.entity.Person;
 import com.nttdata.service.PersonService;
+import org.apache.commons.lang.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 
 /**
@@ -34,8 +37,9 @@ public class PersonController {
      */
     @GetMapping("/getPersonById/{id}")
     public Mono<Person> getPersonById(@PathVariable("id") Long id) {
+        System.out.println("id " + id);
         Mono<Person> person = personService.getPersonById(id);
-        return (person);
+        return person.switchIfEmpty(Mono.just(new Person()));
     }
     /**
      * Metodo que realiza la insercion y actualizacion de la entidad Person

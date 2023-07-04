@@ -1,9 +1,6 @@
 package com.nttdata.service;
 
-import com.nttdata.entity.Account;
-import com.nttdata.entity.AccountDetail;
-import com.nttdata.entity.Message;
-import com.nttdata.entity.QueryBalance;
+import com.nttdata.entity.*;
 import com.nttdata.feignclient.*;
 import com.nttdata.interfaces.MathOperation;
 import com.nttdata.model.*;
@@ -11,16 +8,26 @@ import com.nttdata.repository.AccountDetailRepository;
 import com.nttdata.repository.AccountRepository;
 import io.reactivex.rxjava3.core.Observable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Servicio de la entidad Account para acceder al repository
  */
@@ -35,17 +42,18 @@ public class AccountService {
 
     ClientFeignClient clientFeignClient;
 
+    ProductFeignClient productFeignClient;
 
-    private ProductFeignClient productFeignClient;
+    PersonFeignClient personFeignClient;
 
+    ClientProductFeignClient clientProductFeignClient;
 
-    private PersonFeignClient personFeignClient;
+    AccountHistoryFeignClient accountHistoryFeignClient;
+/*
+    @Autowired
+    ClientWebClient clientWebClient;**/
 
-
-    private ClientProductFeignClient clientProductFeignClient;
-
-
-    private AccountHistoryFeignClient accountHistoryFeignClient;
+    final WebClient webClientClient = WebClient.builder().baseUrl(Constant.urlClient).build();
 
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
@@ -105,15 +113,17 @@ public class AccountService {
      */
     public Mono<Account> getAccountById(Long id){
         Mono<Account> account = accountRepository.findById(id);
+        Account newAccount = new Account();
         try {
-            System.out.println("id " + account.block().getId());
-            account.toFuture().get().setAccountDetail(accountDetailRepository.findAccountDetailByAccount(account.block().getId()));
+            List<AccountDetail> accountDetails = accountDetailRepository.findAll().filter(accountDetail ->  accountDetail.getId_account() == id).collectList().toFuture().get();
+            newAccount = account.toFuture().get();
+            newAccount.setAccountDetail(accountDetails);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
-        return account;
+        return Mono.just(newAccount);
     }
 
     /**
@@ -125,96 +135,148 @@ public class AccountService {
         boolean save = true;
         Message message = new Message();
         Account newAccount = new Account();
+        Client client = new Client();
+        Product product = new Product();
+        System.out.println("1");
         try {
-        Flux<Account> listAccount= accountRepository.findAll();
-        Flux<Account> listAccountSearched = listAccount.filter(accountFilter -> accountFilter.getId_client() == account.getId_client())/*.collect(Collectors.toList())*/;
+            System.out.println("2");
+            List<Account> listAccount= accountRepository.findAll().collectList().toFuture().get();
+            System.out.println("3");
+            List<Account> listAccountSearched = listAccount.stream().filter(accountFilter -> accountFilter.getId_client() == account.getId_client()).collect(Collectors.toList());
+            System.out.println("4");
 
-        Mono<Client> client = clientFeignClient.getClientById(account.getId_client());
-        Product product = productFeignClient.getProductById(account.getId_product()).toFuture().get();
+            WebClient webClientClient = WebClient.builder().baseUrl(Constant.urlClient).build();
+            client = webClientClient
+                    .get()
+                    .uri(Constant.getClientById + account.getId_client())
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(Client.class)
+                    .onErrorResume(e -> Mono.empty())
+                    //.delaySubscription(Duration.ofSeconds(1))
+                    .delaySubscription(Duration.ofMillis(150))
+                    .toFuture()
+                    .get();
 
-        List<AccountDetail> lPersonDoesntExist = this.checkIfPersonNotExists(account.getAccountDetail());
-        Predicate<List<AccountDetail>> lPersonDoesntExistTest = aDetail -> !aDetail.isEmpty() && aDetail.size() > 0;
-        Predicate<Flux<Account>> hasOneOrMoreAccount = accounts -> {
-            try {
-                return !accounts.collectList().toFuture().get().isEmpty() && accounts.collectList().toFuture().get().size() > 0;
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
-                throw new RuntimeException(e);
+
+            WebClient webClientProduct = WebClient.builder().baseUrl(Constant.urlProduct).build();
+            product = webClientProduct
+                    .get()
+                    .uri(Constant.getProductById+account.getId_product())
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(Product.class)
+                    .onErrorResume(e -> Mono.empty())
+                    .delaySubscription(Duration.ofMillis(150))
+                    .toFuture()
+                    .get();
+
+
+            List<AccountDetail> lPersonDoesntExist = this.checkIfPersonNotExists(account.getAccountDetail());
+            Predicate<List<AccountDetail>> lPersonDoesntExistTest = aDetail -> !aDetail.isEmpty() && aDetail.size() > 0;
+            Predicate<List<Account>> hasOneOrMoreAccount = accounts -> !accounts.isEmpty() && accounts.size() > 0;
+
+            Predicate<Client> existClient = eClient -> eClient == null || eClient.getId() == null;
+            Predicate<Product> existProduct = eProduct -> eProduct == null || eProduct.getId() == null;
+            Predicate<Person> existPerson = ePerson -> ePerson == null || ePerson.getId() == null;
+            Predicate<Client> clientIsPersonalType = isPersonal -> isPersonal.getId_client_type() == 1 && isPersonal.getStatus() == 1;
+            Predicate<Account> accountPersonalType = isAccPersonalType -> isAccPersonalType.getId_product() == 1 || isAccPersonalType.getId_product() == 2 || isAccPersonalType.getId_product() == 3;
+            Predicate<Account> accountNotPersonalType = Predicate.not(accountPersonalType);
+            Predicate<Client> clientIsEmpType = isEmp -> isEmp.getId_client_type() == 2 && isEmp.getStatus() == 1;
+            List<AccountDetail> lstAccountHasAuthoridedSigner = account.getAccountDetail().stream().filter(authorized_signer -> authorized_signer.getAuthorized_signature() == 1).collect(Collectors.toList());
+            Predicate<List<AccountDetail>> hasAutoridedSigner = isActive -> isActive.isEmpty() && isActive.size() == 0;
+            Predicate<Account> accountEmpType = isAccPersonalType -> isAccPersonalType.getId_product() != 2;
+            System.out.println("7");
+            if (existProduct.test(product)){
+                message.setCode("002");
+                message.setDescription("The product doesnt exist");
+                newAccount.setMessage(message);
+                save = false;
+            } else if (existClient.test(client)){
+                message.setCode("002");
+                message.setDescription("The client doesnt exist");
+                newAccount.setMessage(message);
+                save = false;
+            } else if (clientIsPersonalType.test(client)){
+                if (accountNotPersonalType.test(account)){
+                    message.setCode("002");
+                    message.setDescription("The product "+product.getName()+" cant be assigned to a personal client");
+                    newAccount.setMessage(message);
+                    save = false;
+                } else if (hasOneOrMoreAccount.test(listAccountSearched)){
+                    message.setCode("002");
+                    message.setDescription("The client has a active account");
+                    newAccount.setMessage(message);
+                    save = false;
+                }
+            } else if (clientIsEmpType.test(client)){
+                if (accountEmpType.test(account)){
+                    message.setCode("002");
+                    message.setDescription("The empresarial client only can has a cuenta corriente");
+                    newAccount.setMessage(message);
+                    save = false;
+                }
+                System.out.println("lstAccountHasAuthoridedSigner " + lstAccountHasAuthoridedSigner.size());
+                if (hasAutoridedSigner.test(lstAccountHasAuthoridedSigner)){
+                    message.setCode("002");
+                    message.setDescription("The empresarial customer must have at least one signer assigned.");
+                    newAccount.setMessage(message);
+                    save = false;
+                } if (lPersonDoesntExistTest.test(lPersonDoesntExist)){
+                    message.setCode("002");
+                    message.setDescription("The persons : "+ lPersonDoesntExist.stream().map(x-> x.getId_person()).collect(Collectors.toList()) +" doesnt exists");
+                    newAccount.setMessage(message);
+                    save = false;
+                }
             }
-        };
-        Predicate<Client> existClient = eClient -> eClient == null;
-        Predicate<Product> existProduct = eProduct -> eProduct == null;
-        Predicate<Person> existPerson = ePerson -> ePerson == null;
-        Predicate<Client> clientIsPersonalType = isPersonal -> isPersonal.getId_client_type() == 1 && isPersonal.getStatus() == 1;
-        Predicate<Account> accountPersonalType = isAccPersonalType -> isAccPersonalType.getId_product() == 1 || isAccPersonalType.getId_product() == 2 || isAccPersonalType.getId_product() == 3;
-        Predicate<Account> accountNotPersonalType = Predicate.not(accountPersonalType);
-        Predicate<Client> clientIsEmpType = isEmp -> isEmp.getId_client_type() == 2 && isEmp.getStatus() == 1;
-        List<AccountDetail> lstAccountHasAuthoridedSigner = account.getAccountDetail().stream().filter(authorized_signer -> authorized_signer.getAuthorized_signature() == 1).collect(Collectors.toList());
-        Predicate<List<AccountDetail>> hasAutoridedSigner = isActive -> isActive.isEmpty() && isActive.size() == 0;
-        Predicate<Account> accountEmpType = isAccPersonalType -> isAccPersonalType.getId_product() != 2;
-        /*if (existProduct.test(product)){
-            message.setCode("002");
-            message.setDescription("The product doesnt exist");
-            newAccount.setMessage(message);
-            save = false;
-        } else if (existClient.test(client)){
-            message.setCode("002");
-            message.setDescription("The client doesnt exist");
-            newAccount.setMessage(message);
-            save = false;
-        } else if (clientIsPersonalType.test(client)){
-            if (accountNotPersonalType.test(account)){
-                message.setCode("002");
-                message.setDescription("The product "+product.getName()+" cant be assigned to a personal client");
+
+            if (save){
+                System.out.println("save " + save);
+
+                message = new Message("001", "Account created");
+                account.setId(sequenceGeneratorService.getSequenceNumber(Account.SEQUENCE_NAME));
+                newAccount = accountRepository.save(account).toFuture().get();
                 newAccount.setMessage(message);
-                save = false;
-        } else if (hasOneOrMoreAccount.test(listAccountSearched)){
-                message.setCode("002");
-                message.setDescription("The client has a active account");
-                newAccount.setMessage(message);
-                save = false;
+                Long idAccountTmp = newAccount.getId();
+
+                Predicate<Long> existId = (i) -> i > 0;
+                if (existId.test(newAccount.getId()) && account.getAccountDetail() != null){
+                    System.out.println("idAccountTmp metodo If " + idAccountTmp);
+
+                    List<AccountDetail> listAccountDetail = account.getAccountDetail().stream()
+                            .map(accountDetail -> {
+                                        accountDetail.setId_account(idAccountTmp);
+                                        return accountDetail;
+                                    }
+                            ).collect(Collectors.toList());
+
+                            System.out.println("tamanio array" + listAccountDetail.size());
+                            listAccountDetail.forEach((x) ->
+                            {
+                                try {
+                                    x.setId(sequenceGeneratorService.getSequenceNumber(AccountDetail.SEQUENCE_NAME));
+                                    AccountDetail accountDetail = accountDetailRepository.save(x).toFuture().get();
+                                } catch (InterruptedException e) {
+                                    throw new RuntimeException(e);
+                                } catch (ExecutionException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                    );
+                }
+                newAccount = this.getAccountById(idAccountTmp).toFuture().get();
             }
-        } else if (clientIsEmpType.test(client)){
-            if (accountEmpType.test(account)){
-                message.setCode("002");
-                message.setDescription("The empresarial client only can has a cuenta corriente");
-                newAccount.setMessage(message);
-                save = false;
-            }
-            System.out.println("lstAccountHasAuthoridedSigner " + lstAccountHasAuthoridedSigner.size());
-            if (hasAutoridedSigner.test(lstAccountHasAuthoridedSigner)){
-                message.setCode("002");
-                message.setDescription("The empresarial customer must have at least one signer assigned.");
-                newAccount.setMessage(message);
-                save = false;
-            } if (lPersonDoesntExistTest.test(lPersonDoesntExist)){
-                message.setCode("002");
-                message.setDescription("The persons : "+ lPersonDoesntExist.stream().map(x-> x.getId_person()).collect(Collectors.toList()) +" doesnt exists");
-                newAccount.setMessage(message);
-                save = false;
-            }
-        }*/
-
-        if (save){
-
-            message = new Message("001", "Account created");
-            account.setId(sequenceGeneratorService.getSequenceNumber(Account.SEQUENCE_NAME));
-            newAccount = accountRepository.save(account).toFuture().get();
-            newAccount.setMessage(message);
-            Long idAccountTmp = newAccount.getId();
-
-             Predicate<Long> existId = (i) -> i > 0;
-             if (existId.test(newAccount.getId())){
-                 List<AccountDetail> listAccountDetail = account.getAccountDetail().stream().map(accountDetail -> {accountDetail.setId_account(idAccountTmp); return accountDetail;}).collect(Collectors.toList());
-                 listAccountDetail.forEach((x) -> accountDetailRepository.save(x));
-             }
-             newAccount = this.getAccountById(idAccountTmp).toFuture().get();
-
-        }
         } catch (InterruptedException e) {
+            message.setCode("-1");
+            message.setDescription(e.getMessage());
             throw new RuntimeException(e);
         } catch (ExecutionException e) {
+            message.setCode("-1");
+            message.setDescription(e.getMessage());
+            throw new RuntimeException(e);
+        }catch (Exception e) {
+            message.setCode("-1");
+            message.setDescription(e.getMessage());
             throw new RuntimeException(e);
         }
         return Mono.just(newAccount);
@@ -225,21 +287,42 @@ public class AccountService {
      * @return retorna una lista de objetos de la entidad AccountDetail
      */
     private List<AccountDetail> checkIfPersonNotExists(List<AccountDetail> lstAccountOrigin){
-        List<AccountDetail> listNotExistPerson = new ArrayList<AccountDetail>();
-        lstAccountOrigin.forEach((x) -> {
-            Person person = null;
-            try {
-                person = personFeignClient.getPersonById(x.getId_person()).toFuture().get();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
-                throw new RuntimeException(e);
-            }
-            if (person==null){
-                listNotExistPerson.add(x);
-            }
-        });
-        return listNotExistPerson;
+        System.out.println("checkIfPersonNotExists");
+        AtomicReference<List<AccountDetail>> listNotExistPerson = new AtomicReference<>(new ArrayList<AccountDetail>());
+        if (lstAccountOrigin !=null) {
+        System.out.println("tamanio de inicio foreach " +  lstAccountOrigin.size());
+            lstAccountOrigin.forEach((x) -> {
+                WebClient webClientPerson = WebClient.builder().baseUrl(Constant.urlPerson).build();
+                    System.out.println("metodo 1" );
+                Person person = new Person();
+                try {
+                    person = webClientPerson
+                            .get()
+                            .uri(Constant.getPersonById+x.getId_person())
+                            .accept(MediaType.APPLICATION_JSON)
+                            .retrieve()
+                            .bodyToMono(Person.class)
+                            .onErrorResume(e -> null)
+                            .delaySubscription(Duration.ofMillis(75))
+                            .toFuture()
+                            .get();
+
+                    if (person.getId() == null) {
+                        listNotExistPerson.get().add(x);
+                    }
+                 System.out.println("metodo 2" );
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                } catch (ExecutionException e) {
+                    throw new RuntimeException(e);
+                } catch (NullPointerException e ){
+                    System.out.println("NullPointer" + e.getMessage());
+                }
+
+           });
+        }
+        System.out.println("listNotExistPerson " + listNotExistPerson.get().size());
+        return listNotExistPerson.get();
     }
 
     /**
@@ -413,5 +496,28 @@ public class AccountService {
         System.out.println("lstResultHistClientProduct"+listAccountHistoryFlatMap.size());
         return Flux.fromIterable(listAccountHistoryFlatMap);
     }
+
+    public Mono<Client> accountwebclient(){
+        WebClient webClientClient = WebClient.builder().baseUrl(Constant.urlClient).build();
+        Mono<Client> client =   webClientClient
+                .get()
+                .uri(Constant.getClientById+1)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(Client.class);
+        return client;
+    }
+
+   public Client getClientByMono() throws ExecutionException, InterruptedException, TimeoutException {
+        return webClientClient
+               .get()
+               .uri(Constant.getClientById + 1L)
+               .accept(MediaType.APPLICATION_JSON)
+               .retrieve()
+               .bodyToMono(Client.class).timeout(Duration.ofSeconds(1L))
+               .onErrorResume(e -> Mono.empty())//.delaySubscription(Duration.ofSeconds(1))
+                .toFuture().get();
+    }
+
 
 }

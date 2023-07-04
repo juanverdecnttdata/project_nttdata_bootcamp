@@ -19,7 +19,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class Product implements Serializable {
     @Id
-    private Long id_product;
+    private Long id;
     private Integer id_product_type; /* (Pasivo o Activo) */
     private String name;
     private Integer status;

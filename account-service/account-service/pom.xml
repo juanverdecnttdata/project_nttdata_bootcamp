@@ -63,6 +63,10 @@
 			<artifactId>checkstyle</artifactId>
 			<version>5.0</version>
 		</dependency>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -2,6 +2,7 @@ package com.nttdata.model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.nttdata.entity.Message;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -19,7 +21,8 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Client implements Serializable {
+//@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+public class Client {
     @Id
     private Long id;
     private Long id_person;

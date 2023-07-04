@@ -2,15 +2,17 @@ package com.nttdata.feignclient;
 
 import com.nttdata.entity.Constant;
 import com.nttdata.model.Product;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Mono;
 
 /**
  * Clase FeingClient que se conecta al microservicio product-service
  */
-@FeignClient(name="product-service",path = "product", url = Constant.urlProduct)
+@ReactiveFeignClient(name="product-service",path = "product", url = Constant.urlProduct)
 public interface ProductFeignClient {
     /**
      * Metodo que se conecta al servicio remoto obtiene la informacion de la entidad Product

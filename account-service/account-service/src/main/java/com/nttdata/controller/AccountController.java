@@ -4,6 +4,7 @@ import com.nttdata.entity.Account;
 import com.nttdata.entity.Message;
 import com.nttdata.entity.QueryBalance;
 import com.nttdata.model.AccountHistory;
+import com.nttdata.model.Client;
 import com.nttdata.model.ClientProduct;
 import com.nttdata.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
 /**
  * Clase Controller de la entidad Person
  */
@@ -80,4 +84,16 @@ public class AccountController {
     public Flux<AccountHistory> listMovements(@RequestBody Account account){
         return accountService.listMovements(account);
     }
+
+    @GetMapping("/test")
+    public Mono<Client> listAccountById(){
+        return accountService.accountwebclient();
+    }
+
+    @GetMapping("/getclient")
+    public Client getclient() throws ExecutionException, InterruptedException, TimeoutException {
+        return accountService.getClientByMono();
+    }
+
+
 }

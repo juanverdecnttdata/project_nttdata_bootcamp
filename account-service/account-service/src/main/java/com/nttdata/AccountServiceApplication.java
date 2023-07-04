@@ -2,12 +2,13 @@ package com.nttdata;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.reactive.config.EnableWebFlux;
 import reactivefeign.spring.config.EnableReactiveFeignClients;
 
 /**
  * Clase iniciador del aplicativo spring boot
  */
-
+@EnableWebFlux
 @EnableReactiveFeignClients
 @SpringBootApplication
 public class AccountServiceApplication {

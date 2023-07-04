@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
  * Clase FeingClient que se conecta al microservicio client-product-service
  */
-@FeignClient(name="client-product-service",path = "clientProduct", url = Constant.urlClientProduct)
+@ReactiveFeignClient(name="client-product-service",path = "clientProduct", url = Constant.urlClientProduct)
 public interface ClientProductFeignClient {
     /**
      * Metodo que se conecta al servicio remoto obtiene la informacion de la entidad ClientProduct
