@@ -3,6 +3,7 @@ package com.nttdata.controller;
 import com.nttdata.entity.Account;
 import com.nttdata.entity.Message;
 import com.nttdata.entity.QueryBalance;
+import com.nttdata.entity.Transaction;
 import com.nttdata.model.AccountHistory;
 import com.nttdata.model.Client;
 import com.nttdata.model.ClientProduct;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -90,10 +92,13 @@ public class AccountController {
         return accountService.accountwebclient();
     }
 
-    @GetMapping("/getclient")
+ /*   @GetMapping("/getclient")
     public Client getclient() throws ExecutionException, InterruptedException, TimeoutException {
         return accountService.getClientByMono();
+    }*/
+
+    @PostMapping("/transaction")
+    public Mono<Message> transaction(@RequestBody @Valid Transaction transaction){
+        return accountService.transaction(transaction);
     }
-
-
 }

@@ -4,13 +4,17 @@ import com.nttdata.entity.AccountHistory;
 import com.nttdata.model.Account;
 import com.nttdata.model.ClientProduct;
 import com.nttdata.service.AccountHistoryService;
+import io.reactivex.rxjava3.core.Observable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 /**
  * Clase Controller de la entidad AccountHistory
@@ -44,18 +48,27 @@ public class AccountHistoryController {
      */
     @PostMapping("/listAccountHistoryByAccount")
     public Flux<AccountHistory> listAccountHistoryByAccount(@RequestBody List<Account> account){
-        Flux<AccountHistory> accountsHistory = accountHistoryService.getAll();
-        List<AccountHistory> newAccountsHistory = new ArrayList<AccountHistory>();
-
-        accountsHistory
-                .filter(accountHistory -> account.stream().noneMatch(compare -> compare.getId().equals(accountHistory.getId_account())))
+        System.out.println("listAccountHistoryByAccount");
+        List<AccountHistory> accountsHistory = null;
+        try {
+            accountsHistory = accountHistoryService.getAll().collectList().toFuture().get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+        AtomicReference<List<AccountHistory>> newAccountsHistory = new AtomicReference<>();
+        Observable<AccountHistory> productsObservable = Observable.fromIterable(accountsHistory);
+        productsObservable
+                .filter(accountHistory -> account.stream().anyMatch(compare -> compare.getId().equals(accountHistory.getId_account())))
                 .collect(Collectors.toList())
                 .subscribe(
-                        accountTmp -> newAccountsHistory.addAll(accountTmp),
+                        newAccountsHistory::set,
                         error -> System.out.println("error " + error.getMessage())
                 );
-        //System.out.println(newAccountsHistory.get().size());
-        return Flux.fromIterable(newAccountsHistory);
+        System.out.println(newAccountsHistory.get().size());
+
+        return Flux.fromIterable(newAccountsHistory.get());
     }
     /**
      * Metodo que obtiene los datos por cliente-producto
@@ -64,16 +77,23 @@ public class AccountHistoryController {
      */
     @PostMapping("/listAccountHistoryByClientProduct")
     public Flux<AccountHistory> listAccountHistoryByClientProduct(@RequestBody List<ClientProduct> clientProducts){
-        Flux<AccountHistory> accountsHistory = accountHistoryService.getAll();
-        List<AccountHistory> newAccountsHistory = new ArrayList<AccountHistory>();
-        accountsHistory
-                .filter(accountHistory -> clientProducts.stream().noneMatch(compare -> compare.getId().equals(accountHistory.getId_client_product())))
+        List<AccountHistory> accountsHistory = null;
+        try {
+            accountsHistory = accountHistoryService.getAll().collectList().toFuture().get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+        AtomicReference<List<AccountHistory>> newAccountsHistory = new AtomicReference<>();
+        Observable<AccountHistory> productsObservable = Observable.fromIterable(accountsHistory);
+        productsObservable
+                .filter(accountHistory -> clientProducts.stream().anyMatch(clientProduct -> clientProduct.getId().equals(accountHistory.getId_client_product())))
                 .collect(Collectors.toList())
                 .subscribe(
-                        clientProductTmp -> newAccountsHistory.addAll(clientProductTmp),
+                        newAccountsHistory::set,
                         error -> System.out.println("error " + error.getMessage())
                 );
-        System.out.println(newAccountsHistory.size());
-        return Flux.fromIterable(newAccountsHistory);
+        return Flux.fromIterable(newAccountsHistory.get());
     }
 }

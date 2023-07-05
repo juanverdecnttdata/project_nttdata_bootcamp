@@ -26,5 +26,6 @@ public class AccountHistory implements Serializable {
     private Integer status;
     private Date operation_date;
     private String operation_terminal;
-
+    private Long id_account_destination;
+    private Long id_account_origin;
 }

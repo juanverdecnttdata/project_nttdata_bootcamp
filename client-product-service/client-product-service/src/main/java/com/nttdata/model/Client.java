@@ -32,5 +32,4 @@ public class Client {
     private String modification_terminal;
     @Transient
     private Message message;
-
 }

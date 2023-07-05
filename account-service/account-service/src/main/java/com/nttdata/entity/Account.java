@@ -38,6 +38,7 @@ public class Account implements Serializable {
     private String modification_terminal;
     private BigDecimal balance/* (saldo)*/;
     private Long id_product;
+    private Integer n_transactions;
     @Transient
     private Message message;
     @Transient

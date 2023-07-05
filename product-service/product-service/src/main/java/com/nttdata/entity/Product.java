@@ -39,4 +39,6 @@ public class Product implements Serializable {
     private Integer n_operation_month;
     private Integer free_movements;
     private BigDecimal amount_maintenance;
+    private BigDecimal minimun_monthly;
+    private BigDecimal comission;
 }
