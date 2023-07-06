@@ -4,8 +4,10 @@ import com.nttdata.entity.*;
 import com.nttdata.interfaces.MathOperation;
 import com.nttdata.model.*;
 import com.nttdata.repository.AccountDetailRepository;
+import com.nttdata.repository.AccountLogRepository;
 import com.nttdata.repository.AccountRepository;
 import io.reactivex.rxjava3.core.Observable;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,8 @@ public class AccountService {
     @Autowired
     private AccountDetailRepository accountDetailRepository;
 
+    @Autowired
+    private AccountLogRepository accountLogRepository;
 
     @Autowired
     private SequenceGeneratorService sequenceGeneratorService;
@@ -126,7 +130,7 @@ public class AccountService {
      * @param account Objeto de la entidad Account
      * @return retorna el objeto de la entidad account insertado o actualizado
      */
-    public Mono<Account> save(Account account) {
+    public Mono<Account> saveAccount(Account account) {
         boolean save = true;
         Message message = new Message();
         Account newAccount = new Account();
@@ -208,7 +212,7 @@ public class AccountService {
                 message = new Message("001", "Account created");
                 account.setN_transactions(Constant.number_transaction_account);
                 account.setId(sequenceGeneratorService.getSequenceNumber(Account.SEQUENCE_NAME));
-                newAccount = accountRepository.save(account).toFuture().get();
+                newAccount = this.save(account).toFuture().get();
 
                 Long idAccountTmp = newAccount.getId();
 
@@ -349,7 +353,7 @@ public class AccountService {
                         accountHistory.setOperation_terminal(accountOperation.getModification_terminal());
                         accountHistory.setOperation_type(accountOperation.getOperation_type());
                         account.setBalance(amountUpdated);
-                        Account accountUpdated = accountRepository.save(account).toFuture().get();
+                        Account accountUpdated = this.update(account).toFuture().get();
 
                         if (saveAutomaticOperation) {
                             accountHistoryAutomaticOp.setAmount(amountComission);
@@ -596,8 +600,8 @@ public class AccountService {
                 accountDestination.setBalance(amountUpdatedDestination);
 
                 try {
-                    Account accountDestinationUpdated = accountRepository.save(accountOrigin).toFuture().get();
-                    Account accountOriginUpdated = accountRepository.save(accountDestination).toFuture().get();
+                    Account accountDestinationUpdated = this.update(accountOrigin).toFuture().get();
+                    Account accountOriginUpdated = this.update(accountDestination).toFuture().get();
                     AccountHistory accountHistoryOrigin = new AccountHistory();
                     accountHistoryOrigin.setAmount(transaction.getAmount());
                     accountHistoryOrigin.setId_account(accountOrigin.getId());
@@ -646,4 +650,75 @@ public class AccountService {
         }
         return Mono.just(message);
     }
+
+    public Mono<Account> save(Account account) {
+        System.out.println("save");
+        account.setCreation_date(new Date());
+        AccountLog currentAccountLog= new AccountLog();
+        BeanUtils.copyProperties(account, currentAccountLog, "created");
+        currentAccountLog.setId(sequenceGeneratorService.getSequenceNumber(AccountLog.SEQUENCE_NAME));
+        currentAccountLog.setId_account(account.getId());
+        try {
+            AccountLog newCurrentAccountLog =accountLogRepository.save(currentAccountLog).toFuture().get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+        return accountRepository.save(account);
+    }
+
+    public Mono<Account> update(Account account) {
+        account.setModification_date(new Date());
+        AccountLog currentAccountLog= new AccountLog();
+        BeanUtils.copyProperties(account, currentAccountLog, "created");
+        currentAccountLog.setId(sequenceGeneratorService.getSequenceNumber(AccountLog.SEQUENCE_NAME));
+        currentAccountLog.setId_account(account.getId());
+        try {
+            AccountLog newCurrentAccountLog =accountLogRepository.save(currentAccountLog).toFuture().get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+        return accountRepository.save(account);
+    }
+
+    public Flux<AccountLog> getAllAccountLog(){
+        return this.accountLogRepository.findAll();
+    }
+
+    public Mono<BalanceSummary> getBalanceSumary(Long id_client){
+        System.out.println("id_client" + id_client);
+        BalanceSummary balanceSummary = new BalanceSummary();
+        WebClient webClientProductClient = WebClient.builder().baseUrl(Constant.urlClientProduct).build();
+        List<ClientProductLog> lstClientProduct = null;
+        List<AccountLog> lstAccountLog = null;
+        try {
+
+           lstAccountLog = this.accountLogRepository.findAll().collectList().toFuture().get();
+            lstClientProduct = webClientProductClient
+                    .get()
+                    .uri(Constant.getAllClientProductLog)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToFlux(ClientProductLog.class)
+                    .onErrorResume(e -> Mono.empty())
+                    .delaySubscription(Duration.ofMillis(150))
+                    .collectList()
+                    .toFuture()
+                    .get();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("log de cliente obtenido" + lstClientProduct);
+        List<ClientProductLog> lstClientProductFiltered = lstClientProduct.stream().filter(clientProductLog -> clientProductLog.getId_client() == id_client).collect(Collectors.toList());
+        List<AccountLog> lstAccountLogFiltered = lstAccountLog.stream().filter(clientProductLog -> clientProductLog.getId_client() == id_client).collect(Collectors.toList());
+        balanceSummary.setLstClientProductLog(lstClientProductFiltered);
+        balanceSummary.setListAccountLog(lstAccountLogFiltered);
+        return Mono.just(balanceSummary);
+    }
+
 }

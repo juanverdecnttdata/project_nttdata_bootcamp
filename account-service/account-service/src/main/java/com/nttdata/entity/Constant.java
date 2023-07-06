@@ -13,7 +13,7 @@ public class Constant implements Serializable {
     public static final String getClientById = "/client/getClientById/";
     public static final String getAllClientProduct = "/clientProduct/all/";
 
-
+    public static final String getAllClientProductLog = "/clientProduct/getAllClientProductLog/";
 
     public static final String urlClientProduct = "http://localhost:8087";
     public static final String getClientProductById = "/clientProduct/getClientProductById/";

@@ -1,6 +1,7 @@
 package com.nttdata.controller;
 
 import com.nttdata.entity.ClientProduct;
+import com.nttdata.entity.ClientProductLog;
 import com.nttdata.entity.Message;
 import com.nttdata.service.ClientProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class ClientProductController {
      */
     @PostMapping("/save")
     public Mono<ClientProduct> saveClient(@RequestBody ClientProduct clientProduct){
-        return clientProductService.save(clientProduct);
+        return clientProductService.saveClientProduct(clientProduct);
     }
     /**
      * Meotodo que busca un cliente producto
@@ -43,5 +44,10 @@ public class ClientProductController {
     @GetMapping("/getClientProductById/{id}")
     public Mono<ClientProduct> getClientProductById(@PathVariable("id") Long id){
         return clientProductService.getClientProductById(id);
+    }
+
+    @GetMapping("/getAllClientProductLog")
+    public Flux<ClientProductLog> getAllClientProductLog(){
+        return clientProductService.getAllClientProductLog();
     }
 }

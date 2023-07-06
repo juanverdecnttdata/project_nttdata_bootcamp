@@ -5,6 +5,7 @@ import com.nttdata.entity.Message;
 import com.nttdata.entity.QueryBalance;
 import com.nttdata.entity.Transaction;
 import com.nttdata.model.AccountHistory;
+import com.nttdata.model.BalanceSummary;
 import com.nttdata.model.Client;
 import com.nttdata.model.ClientProduct;
 import com.nttdata.service.AccountService;
@@ -44,7 +45,7 @@ public class AccountController {
      */
     @PostMapping("/save")
     public Mono<Account> saveAccount(@RequestBody Account account){
-        return accountService.save(account);
+        return accountService.saveAccount(account);
     }
 
     /**
@@ -100,5 +101,10 @@ public class AccountController {
     @PostMapping("/transaction")
     public Mono<Message> transaction(@RequestBody @Valid Transaction transaction){
         return accountService.transaction(transaction);
+    }
+
+    @GetMapping("/getBalanceSumary/{id_client}")
+    public Mono<BalanceSummary> getBalanceSumary(@PathVariable("id_client") Long id_client){
+        return accountService.getBalanceSumary(id_client);
     }
 }
