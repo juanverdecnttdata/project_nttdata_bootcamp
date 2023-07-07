@@ -1,6 +1,9 @@
 package com.nttdata.model;
 
 import com.nttdata.entity.Message;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,12 +11,8 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
-
 /**
- * Entidad Account de la tabla account
+ * Entidad Account de la tabla account.
  */
 @Getter
 @Setter
