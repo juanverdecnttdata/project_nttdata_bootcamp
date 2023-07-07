@@ -55,7 +55,6 @@ public class ClientService {
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
-
         return Mono.just(newClient);
     }
 

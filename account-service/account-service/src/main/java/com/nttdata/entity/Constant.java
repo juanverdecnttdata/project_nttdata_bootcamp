@@ -6,6 +6,7 @@ public class Constant implements Serializable {
     public static final String urlAccountHistory = "http://localhost:8088";
     public static final String urlClient = "http://localhost:8086";
     public static final String saveAccountHistory = "/accountHistory/save";
+    public static final String allAccountHistory = "/accountHistory/all";
     public static final String listAccountHistoryByAccount = "/accountHistory/listAccountHistoryByAccount";
     public static final String listAccountHistoryByClientProduct = "/accountHistory/listAccountHistoryByClientProduct";
     public static final String saveClientProduct = "/clientProduct/save";
@@ -17,6 +18,7 @@ public class Constant implements Serializable {
 
     public static final String urlClientProduct = "http://localhost:8087";
     public static final String getClientProductById = "/clientProduct/getClientProductById/";
+    public static final String allClientProductAccountDebt = "/clientProduct/allClientProductAccountDebt/";
     public static final String getProductById = "/product/getProductById/";
     public static final String urlPerson = "http://localhost:8083";
     public static final String getPersonById = "/person/getPersonById/";

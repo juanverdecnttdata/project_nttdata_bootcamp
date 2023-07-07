@@ -2,8 +2,6 @@ package com.nttdata.service;
 
 
 import com.nttdata.entity.AccountHistory;
-import com.nttdata.entity.Message;
-import com.nttdata.model.Account;
 import com.nttdata.repository.AccountHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

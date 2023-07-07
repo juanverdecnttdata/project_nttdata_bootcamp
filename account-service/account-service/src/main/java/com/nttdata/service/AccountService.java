@@ -156,7 +156,7 @@ public class AccountService {
             Predicate<Product> existProduct = eProduct -> eProduct == null || eProduct.getId() == null;
             Predicate<Person> existPerson = ePerson -> ePerson == null || ePerson.getId() == null;
             Predicate<Client> clientIsPersonalType = isPersonal -> isPersonal.getId_client_type() == 1 && isPersonal.getStatus() == 1;
-            Predicate<Account> accountPersonalType = isAccPersonalType -> isAccPersonalType.getId_product() == 1 || isAccPersonalType.getId_product() == 2 || isAccPersonalType.getId_product() == 3;
+            Predicate<Account> accountPersonalType = isAccPersonalType -> isAccPersonalType.getId_product() == 1 || isAccPersonalType.getId_product() == 2 || isAccPersonalType.getId_product() == 3 || isAccPersonalType.getId_product() == 7 || isAccPersonalType.getId_product() == 8 || isAccPersonalType.getId_product() == 9;
             Predicate<Account> accountNotPersonalType = Predicate.not(accountPersonalType);
             Predicate<Client> clientIsEmpType = isEmp -> isEmp.getId_client_type() == 2 && isEmp.getStatus() == 1;
             List<AccountDetail> lstAccountHasAuthoridedSigner = account.getAccountDetail().stream().filter(authorized_signer -> authorized_signer.getAuthorized_signature() == 1).collect(Collectors.toList());
@@ -309,17 +309,64 @@ public class AccountService {
                     AccountHistory accountHistory = new AccountHistory();
                     AccountHistory accountHistoryAutomaticOp = new AccountHistory();
                     AccountHistory accountHistoryUpdated = new AccountHistory();
-                    Predicate<BigDecimal> isLessToEqualToZero = value -> value.compareTo(BigDecimal.ZERO) == -1;
+                    Predicate<BigDecimal> isLessToEqualToZero = value -> value.compareTo(BigDecimal.ZERO) == -1 || value.compareTo(BigDecimal.ZERO) == 0;
+                    Predicate<Account> isBalanceLessToEqualToZero = value -> accountOperation.getAmount().compareTo(value.getBalance()) == - 1 || accountOperation.getAmount().compareTo(value.getBalance()) ==0;
                     Predicate<Account> isAccountProductNull = value -> value.getId_client_product() == null;
                     Predicate<Account> isClientProductNull = Predicate.not(isAccountProductNull);
                     MathOperation sum = (BigDecimal currentAmount, BigDecimal amount) -> currentAmount.add(amount);
                     MathOperation substract = (BigDecimal currentAmount, BigDecimal amount) -> currentAmount.subtract(amount);
                     BigDecimal amountUpdated = BigDecimal.ZERO;
                     Integer currentNumberOfTransactions = account.getN_transactions();
+                    //Buscar la cuenta principal y si este no tiene saldo buscar la siguiente asociada
+                    if (accountOperation.getOperation_type() == 1) {
+                        if (account.getBalance().compareTo(accountOperation.getAmount()) == -1){
+                            System.out.println("monto menor");
+
+                            List<ClientProductDebtAccount> lstClientProductDebtAccountWC = webClientProductClient
+                                    .get()
+                                    .uri(Constant.allClientProductAccountDebt)
+                                    .accept(MediaType.APPLICATION_JSON)
+                                    .retrieve()
+                                    .bodyToFlux(ClientProductDebtAccount.class)
+                                    .onErrorResume(e -> Mono.empty())
+                                    .delaySubscription(Duration.ofMillis(150)).collectList().toFuture().get();
+
+                            AtomicReference<Account> accountToOperate = new AtomicReference<>(new Account());
+                            List<ClientProductDebtAccount> lstClientProductDebtAccount = lstClientProductDebtAccountWC.stream().filter(clientProductDebtAccount -> clientProductDebtAccount.getId_client_product() == accountOperation.getId_client_product()).collect(Collectors.toList());
+                            System.out.println("tamanio lista lstClientProductDebtAccount" + lstClientProductDebtAccount.size());
+                            if (lstClientProductDebtAccount.size() > 0){
+                                lstClientProductDebtAccount.forEach(i -> {
+                                    try {
+                                        Account accountBalance = accountRepository.findById(i.getId_account()).toFuture().get();
+                                        if (isBalanceLessToEqualToZero.test(accountBalance)){
+                                            System.out.println("ciclo " + accountBalance.getBalance() +" " + accountOperation.getAmount() +" " + accountBalance.getId());
+                                            accountToOperate.set(accountBalance);
+                                            return;
+                                        }
+                                    } catch (InterruptedException e) {
+                                        throw new RuntimeException(e);
+                                    } catch (ExecutionException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                });
+                                if (accountToOperate.get().getId()!= null){
+                                    System.out.println("cuenta encontrada" + account.getId() + " balance " + account.getBalance());
+                                    account = accountToOperate.get();
+                                }
+                            } else {
+                                save = false;
+                                message = new Message("001", "the account has no withdrawal balance");
+                            }
+
+                        }
+                    }
                     if (accountOperation.getOperation_type() == 1) {
                         amountUpdated = this.operate(account.getBalance(), accountOperation.getAmount(), substract);
                     } else if (accountOperation.getOperation_type() == 2) {
                         amountUpdated = this.operate(account.getBalance(), accountOperation.getAmount(), sum);
+                    } else {
+                        save = false;
+                        message = new Message("001", "Operation not available for this type of product");
                     }
                     if (account.getN_transactions() > 0) {
                         account.setN_transactions(currentNumberOfTransactions - 1);
@@ -337,13 +384,11 @@ public class AccountService {
                         amountComission = product.getComission();
                         amountUpdated = this.operate(amountUpdated, amountComission, substract);
                     }
-
                     System.out.println("isLessToEqualToZero" + amountUpdated);
                     if (isLessToEqualToZero.test(amountUpdated)) {
                         save = false;
                         message = new Message("001", "Account balance must not be less than zero");
                     }
-
                     if (save) {
                         accountHistory.setAmount(accountOperation.getAmount());
                         accountHistory.setId_account(accountOperation.getId());
@@ -364,9 +409,9 @@ public class AccountService {
                             accountHistoryAutomaticOp.setOperation_terminal(accountOperation.getModification_terminal());
                             accountHistoryAutomaticOp.setOperation_type(Constant.id_type_operation_automatic_payment);
                         }
-                        try {
+                     try {
 
-                            accountHistoryUpdated = webAccountHistoryClient
+                           accountHistoryUpdated = webAccountHistoryClient
                                     .post()
                                     .uri(Constant.saveAccountHistory)
                                     .body(BodyInserters.fromValue(accountHistory))
@@ -386,7 +431,6 @@ public class AccountService {
                                         .onErrorResume(e -> Mono.empty())
                                         .delaySubscription(Duration.ofMillis(150)).toFuture().get();
                             }
-                            //accountHistoryUpdated = accountHistoryFeignClient.save(accountHistory).toFuture().get();
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         } catch (ExecutionException e) {
@@ -420,8 +464,10 @@ public class AccountService {
                         amountUpdated = this.operate(clientProduct.get().getCredit(), accountOperation.getAmount(), sum);
                     } else if (accountOperation.getOperation_type() == 4) { /*Cargo de consumo*/
                         amountUpdated = this.operate(clientProduct.get().getCredit(), accountOperation.getAmount(), substract);
+                    }  else {
+                        save = false;
+                        message = new Message("001", "Operation not available for this type of product");
                     }
-                    System.out.println("isLessToEqualToZero 2 : " + amountUpdated);
                     if (isLessToEqualToZero.test(amountUpdated)) {
                         save = false;
                         message = new Message("001", "The credit must not be less than zero");
@@ -713,7 +759,6 @@ public class AccountService {
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("log de cliente obtenido" + lstClientProduct);
         List<ClientProductLog> lstClientProductFiltered = lstClientProduct.stream().filter(clientProductLog -> clientProductLog.getId_client() == id_client).collect(Collectors.toList());
         List<AccountLog> lstAccountLogFiltered = lstAccountLog.stream().filter(clientProductLog -> clientProductLog.getId_client() == id_client).collect(Collectors.toList());
         balanceSummary.setLstClientProductLog(lstClientProductFiltered);
@@ -721,4 +766,46 @@ public class AccountService {
         return Mono.just(balanceSummary);
     }
 
+
+    public Flux<AccountHistory> listMovementsCreditAndDebitCard(Account account) {
+        List<AccountHistory> listAccountHistory = null;
+        List<ClientProduct> lstClientProduct = null;
+        WebClient webClientProductClient = WebClient.builder().baseUrl(Constant.urlClientProduct).build();
+        WebClient webAccountHistoryClient = WebClient.builder().baseUrl(Constant.urlAccountHistory).build();
+        AtomicReference<List<AccountHistory>> newAccountsHistory = new AtomicReference<>();
+        try {
+            listAccountHistory = webAccountHistoryClient.get()
+                    .uri(Constant.allAccountHistory)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve().bodyToFlux(AccountHistory.class)
+                    .onErrorResume(e -> Mono.empty())
+                    .delaySubscription(Duration.ofMillis(150)).collectList().toFuture().get();
+
+            lstClientProduct = webClientProductClient.get()
+                    .uri(Constant.getAllClientProduct)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToFlux(ClientProduct.class)
+                    .onErrorResume(e -> Mono.empty())
+                    .delaySubscription(Duration.ofMillis(150)).collectList().toFuture().get();
+            List<ClientProduct> lstClientProductFiltered = lstClientProduct.stream().filter(clientProduct -> clientProduct.getId_account() == account.getId() && (clientProduct.getId_product() == 9 || clientProduct.getId_product() == 6)).collect(Collectors.toList());
+            List<AccountHistory> listAccountHistoryFiltered= listAccountHistory.stream().filter(accountHistory -> accountHistory.getId_account() == account.getId()).collect(Collectors.toList());
+
+
+
+            Observable<AccountHistory> ahObservable = Observable.fromIterable(listAccountHistoryFiltered);
+            ahObservable
+                    .filter(accountHistory -> lstClientProductFiltered.stream().anyMatch(clientProduct -> clientProduct.getId().equals(accountHistory.getId_client_product())))
+                    .collect(Collectors.toList())
+                    .subscribe(newAccountsHistory::set,
+                            error -> System.out.println("error " + error.getMessage())
+                    );
+
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+        return Flux.fromIterable(newAccountsHistory.get().stream().limit(10).collect(Collectors.toList()));
+    }
 }

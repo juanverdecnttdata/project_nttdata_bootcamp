@@ -16,10 +16,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
-
 /**
  * Clase Controller de la entidad Person
  */
@@ -36,6 +32,11 @@ public class AccountController {
     @GetMapping("/all")
     public Flux<Account> listAccounts(){
         return accountService.getAll();
+    }
+
+    @GetMapping("/getAccountById/{id}")
+    public Mono<Account> getAccountById(@PathVariable("id") Long id){
+        return accountService.getAccountById(id);
     }
 
     /**
@@ -93,11 +94,6 @@ public class AccountController {
         return accountService.accountwebclient();
     }
 
- /*   @GetMapping("/getclient")
-    public Client getclient() throws ExecutionException, InterruptedException, TimeoutException {
-        return accountService.getClientByMono();
-    }*/
-
     @PostMapping("/transaction")
     public Mono<Message> transaction(@RequestBody @Valid Transaction transaction){
         return accountService.transaction(transaction);
@@ -107,4 +103,9 @@ public class AccountController {
     public Mono<BalanceSummary> getBalanceSumary(@PathVariable("id_client") Long id_client){
         return accountService.getBalanceSumary(id_client);
     }
+    @PostMapping("/listMovementsCreditAndDebitCard")
+    public Flux<AccountHistory> listMovementsCreditAndDebitCard(@RequestBody Account account){
+        return accountService.listMovementsCreditAndDebitCard(account);
+    }
+
 }

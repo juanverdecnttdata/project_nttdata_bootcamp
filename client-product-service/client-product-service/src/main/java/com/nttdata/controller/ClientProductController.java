@@ -1,8 +1,12 @@
 package com.nttdata.controller;
 
 import com.nttdata.entity.ClientProduct;
+import com.nttdata.entity.ClientProductDebtAccount;
 import com.nttdata.entity.ClientProductLog;
 import com.nttdata.entity.Message;
+import com.nttdata.model.Account;
+import com.nttdata.model.Client;
+import com.nttdata.model.SummaryClientProduct;
 import com.nttdata.service.ClientProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,4 +54,19 @@ public class ClientProductController {
     public Flux<ClientProductLog> getAllClientProductLog(){
         return clientProductService.getAllClientProductLog();
     }
+
+    @PostMapping("/productSummary")
+    public Mono<SummaryClientProduct> productSummary(@RequestBody ClientProduct clientProduct){
+        return clientProductService.clientProductByClientId(clientProduct.getId_client());
+    }
+    @PostMapping("/assignAccountToDebitCard")
+    public Mono<ClientProductDebtAccount> assignAccountToDebitCard(@RequestBody ClientProductDebtAccount clientProductDebtAccount){
+        return clientProductService.assignAccountToDebitCard(clientProductDebtAccount);
+    }
+
+    @PostMapping("/getMainAccount")
+    public Mono<Account> getMainAccount(@RequestBody ClientProduct clientProduct){
+        return clientProductService.getMainAccount(clientProduct);
+    }
+
 }

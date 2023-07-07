@@ -8,8 +8,6 @@ import reactivefeign.spring.config.EnableReactiveFeignClients;
 /**
  * Clase iniciador del aplicativo spring boot
  */
-@EnableWebFlux
-@EnableReactiveFeignClients
 @SpringBootApplication
 public class AccountServiceApplication {
 
