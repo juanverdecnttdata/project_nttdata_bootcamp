@@ -1,32 +1,33 @@
 package com.nttdata.entity;
+
 /**
  * Entidad mensaje, usado para mostrarse en las peticiones rest
  */
 public class Message {
-    private String code;
-    private String description;
+  private String code;
+  private String description;
 
-    public String getCode() {
-        return code;
-    }
+  public Message(String code, String description) {
+    this.code = code;
+    this.description = description;
+  }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+  public Message() {
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public String getCode() {
+    return code;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public void setCode(String code) {
+    this.code = code;
+  }
 
-    public Message(String code, String description) {
-        this.code = code;
-        this.description = description;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public Message() {
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 }

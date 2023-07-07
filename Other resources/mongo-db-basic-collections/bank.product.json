@@ -1,0 +1,180 @@
+[{
+  "_id": 1,
+  "id_product_type": 1,
+  "name": "Ahorro",
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null,
+  "comission_free_mainteance": 1,
+  "n_movements": 3,
+  "n_operation_month": 0,
+  "free_movements": 0,
+  "amount_maintenance": 0,
+  "free_operation_per_month": 1,
+  "minimun_monthly": 0,
+  "comission": 5
+},
+{
+  "_id": 2,
+  "id_product_type": 1,
+  "name": "Cuenta Corriente",
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null,
+  "comission_free_mainteance": 0,
+  "n_movements": 0,
+  "n_operation_month": 0,
+  "free_movements": 1,
+  "amount_maintenance": 3,
+  "free_operation_per_month": 1,
+  "minimun_monthly": 0,
+  "comission": 5
+},
+{
+  "_id": 3,
+  "id_product_type": 1,
+  "name": "Plazo Fijo",
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null,
+  "comission_free_mainteance": 1,
+  "n_movements": 0,
+  "n_operation_month": 1,
+  "free_movements": 0,
+  "amount_maintenance": 0,
+  "free_operation_per_month": 1,
+  "minimun_monthly": 0,
+  "comission": 5
+},
+{
+  "_id": 4,
+  "id_product_type": 2,
+  "name": "Personal",
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null,
+  "comission_free_mainteance": 0,
+  "n_movements": 0,
+  "n_operation_month": 1,
+  "free_movements": 1,
+  "amount_maintenance": 0,
+  "free_operation_per_month": 1,
+  "minimun_monthly": 0,
+  "comission": 5
+},
+{
+  "_id": 5,
+  "id_product_type": 2,
+  "name": "Empresarial",
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null,
+  "comission_free_mainteance": 0,
+  "n_movements": 0,
+  "n_operation_month": 1,
+  "free_movements": 1,
+  "amount_maintenance": 0,
+  "free_operation_per_month": 1,
+  "minimun_monthly": 0,
+  "comission": 5
+},
+{
+  "_id": 6,
+  "id_product_type": 2,
+  "name": "Tarjeta de Credito",
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null,
+  "comission_free_mainteance": 0,
+  "n_movements": 0,
+  "n_operation_month": 1,
+  "free_movements": 1,
+  "amount_maintenance": 0,
+  "free_operation_per_month": 1,
+  "minimun_monthly": 0,
+  "comission": 5
+},
+{
+  "_id": 7,
+  "id_product_type": 1,
+  "name": "VIP - Cuenta de ahorro",
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null,
+  "comission_free_mainteance": 1,
+  "n_movements": 3,
+  "n_operation_month": 0,
+  "free_movements": 0,
+  "amount_maintenance": 0,
+  "free_operation_per_month": 1,
+  "minimun_monthly": 500,
+  "comission": 5
+},
+{
+  "_id": 8,
+  "id_product_type": 1,
+  "name": "PYME",
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null,
+  "comission_free_mainteance": 1,
+  "n_movements": 3,
+  "n_operation_month": 0,
+  "free_movements": 0,
+  "amount_maintenance": 0,
+  "free_operation_per_month": 1,
+  "minimun_monthly": 0,
+  "comission": 5
+},
+{
+  "_id": 9,
+  "id_product_type": 1,
+  "name": "Tarjeta de Debito",
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null,
+  "comission_free_mainteance": 1,
+  "n_movements": 999,
+  "n_operation_month": 0,
+  "free_movements": 0,
+  "amount_maintenance": 0,
+  "free_operation_per_month": 999,
+  "minimun_monthly": 0,
+  "comission": 0
+}]

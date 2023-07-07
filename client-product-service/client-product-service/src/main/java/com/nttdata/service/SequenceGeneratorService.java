@@ -19,24 +19,25 @@ import static org.springframework.data.mongodb.core.query.Query.query;
  */
 @Service
 public class SequenceGeneratorService {
-    @Autowired
-    private ReactiveMongoOperations reactiveMongoOperations;
+  @Autowired
+  private ReactiveMongoOperations reactiveMongoOperations;
 
-    /**
-     * Metodo que genera y obtiene un codigo correlativo de la coleccion indicada
-     * @param sequenceName Nombre de la secuencia
-     * @return retorna un numero secuencial correspondiente a la secuencia indicada
-     */
-    public long getSequenceNumber(String sequenceName) {
-        try {
-        Mono<DatabaseSequence> counter = reactiveMongoOperations.findAndModify(query(where("_id").is(sequenceName)),
-                new Update().inc("seq",1), options().returnNew(true).upsert(true),
-                DatabaseSequence.class);
-            return !Objects.isNull(counter) ? counter.toFuture().get().getSeq() : 1;
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+  /**
+   * Metodo que genera y obtiene un codigo correlativo de la coleccion indicada
+   *
+   * @param sequenceName Nombre de la secuencia
+   * @return retorna un numero secuencial correspondiente a la secuencia indicada
+   */
+  public long getSequenceNumber(String sequenceName) {
+    try {
+      Mono<DatabaseSequence> counter = reactiveMongoOperations.findAndModify(query(where("_id").is(sequenceName)),
+          new Update().inc("seq", 1), options().returnNew(true).upsert(true),
+          DatabaseSequence.class);
+      return !Objects.isNull(counter) ? counter.toFuture().get().getSeq() : 1;
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    } catch (ExecutionException e) {
+      throw new RuntimeException(e);
     }
+  }
 }

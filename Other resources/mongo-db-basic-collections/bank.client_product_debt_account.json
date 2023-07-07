@@ -1,0 +1,23 @@
+[{
+  "_id": 2,
+  "id_client_product": 9,
+  "id_account": 44,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T21:59:56.745Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "main_account": 1,
+  "_class": "com.nttdata.entity.ClientProductDebtAccount"
+},
+{
+  "_id": 3,
+  "id_client_product": 9,
+  "id_account": 43,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-07T02:39:15.409Z"
+  },
+  "main_account": 0,
+  "_class": "com.nttdata.entity.ClientProductDebtAccount"
+}]

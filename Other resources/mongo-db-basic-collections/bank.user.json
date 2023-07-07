@@ -1,0 +1,9 @@
+[{
+  "_id": 1,
+  "identificationNumber": "47552460",
+  "identificationType": "1",
+  "cellNumber": "944206474",
+  "imeiNumber": "112022 20 233388 1",
+  "email": "juanverdec@gmail.com",
+  "_class": "com.nttdata.entity.User"
+}]

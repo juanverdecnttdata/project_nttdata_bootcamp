@@ -1,0 +1,363 @@
+[{
+  "_id": 4,
+  "id_account": 36,
+  "operation_type": 2,
+  "amount": "70.00",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T06:31:23.182Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 5,
+  "id_account": 36,
+  "operation_type": 1,
+  "amount": "80.00",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T06:33:04.075Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 6,
+  "id_account": 36,
+  "operation_type": 5,
+  "amount": "5",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T06:33:27.148Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 7,
+  "id_account": 36,
+  "operation_type": 5,
+  "amount": "5",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T06:35:20.069Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 8,
+  "id_account": 36,
+  "operation_type": 1,
+  "amount": "20.00",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T06:38:14.931Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 9,
+  "id_account": 36,
+  "operation_type": 5,
+  "amount": "5",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T06:38:14.979Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 10,
+  "id_account": 36,
+  "operation_type": 6,
+  "amount": "1",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T08:06:04.366Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "id_account_destination": 37,
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 11,
+  "id_account": 37,
+  "operation_type": 6,
+  "amount": "1",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T08:06:04.367Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "id_account_origin": 36,
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 12,
+  "id_account": 36,
+  "operation_type": 6,
+  "amount": "1",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T08:09:04.277Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "id_account_destination": 37,
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 13,
+  "id_account": 37,
+  "operation_type": 6,
+  "amount": "1",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T08:09:04.278Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "id_account_origin": 36,
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 14,
+  "id_account": 36,
+  "operation_type": 1,
+  "amount": "30.00",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T21:48:10.637Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 15,
+  "id_account": 36,
+  "operation_type": 5,
+  "amount": "5",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T21:48:10.642Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 16,
+  "id_account": 36,
+  "operation_type": 1,
+  "amount": "30.00",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T21:48:41.341Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 17,
+  "id_account": 36,
+  "operation_type": 5,
+  "amount": "5",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T21:48:41.393Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 18,
+  "id_account": 41,
+  "operation_type": 1,
+  "amount": "450.00",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T21:49:08.972Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 19,
+  "id_account": 41,
+  "operation_type": 1,
+  "amount": "450.00",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T21:49:25.343Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 20,
+  "id_client_product": 5,
+  "operation_type": 1,
+  "amount": "450.00",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T22:02:33.705Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 21,
+  "id_client_product": 5,
+  "operation_type": 4,
+  "amount": "450.00",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-05T22:02:55.021Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 22,
+  "id_account": 44,
+  "id_client_product": 9,
+  "operation_type": 1,
+  "amount": "4050",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-07T03:48:54.348Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 23,
+  "id_account": 44,
+  "id_client_product": 9,
+  "operation_type": 1,
+  "amount": "10",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-07T03:56:03.002Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 24,
+  "id_account": 44,
+  "id_client_product": 9,
+  "operation_type": 1,
+  "amount": "10",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-07T03:56:04.117Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 25,
+  "id_account": 44,
+  "id_client_product": 9,
+  "operation_type": 1,
+  "amount": "10",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-07T03:56:05.041Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 26,
+  "id_account": 44,
+  "id_client_product": 9,
+  "operation_type": 1,
+  "amount": "10",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-07T03:56:05.887Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 27,
+  "id_account": 44,
+  "id_client_product": 9,
+  "operation_type": 1,
+  "amount": "10",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-07T03:56:06.780Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 28,
+  "id_account": 44,
+  "id_client_product": 9,
+  "operation_type": 1,
+  "amount": "10",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-07T03:56:07.654Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 29,
+  "id_account": 44,
+  "id_client_product": 9,
+  "operation_type": 1,
+  "amount": "10",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-07T03:56:08.537Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 30,
+  "id_account": 44,
+  "id_client_product": 9,
+  "operation_type": 1,
+  "amount": "10",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-07T03:56:09.429Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 31,
+  "id_account": 44,
+  "id_client_product": 9,
+  "operation_type": 1,
+  "amount": "15",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-07T03:56:12.619Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+},
+{
+  "_id": 32,
+  "id_account": 44,
+  "id_client_product": 9,
+  "operation_type": 1,
+  "amount": "17",
+  "status": 1,
+  "operation_date": {
+    "$date": "2023-07-07T03:56:15.807Z"
+  },
+  "operation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.AccountHistory"
+}]

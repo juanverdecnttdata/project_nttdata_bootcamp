@@ -17,7 +17,7 @@ import java.io.Serializable;
 @ToString
 @Document(collection = "database_sequences")
 public class DatabaseSequence implements Serializable {
-    @Id
-    private String _id;
-    private long seq;
+  @Id
+  private String _id;
+  private long seq;
 }

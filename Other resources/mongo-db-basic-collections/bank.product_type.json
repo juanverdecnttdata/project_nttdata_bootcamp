@@ -1,0 +1,26 @@
+[{
+  "_id": {
+    "$oid": "649c9bdbef91d6d794fba895"
+  },
+  "id": 1,
+  "name": "pasivo",
+  "detail": "Cuentas bancarias",
+  "status": 1,
+  "creation_date": "2023-06-20",
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null
+},
+{
+  "_id": {
+    "$oid": "649c9beeef91d6d794fba899"
+  },
+  "id": 2,
+  "name": "activo",
+  "detail": "Creditos",
+  "status": 1,
+  "creation_date": "2023-06-20",
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null
+}]

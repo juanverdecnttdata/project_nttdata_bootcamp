@@ -1,0 +1,78 @@
+[{
+  "_id": {
+    "$oid": "649caeb2ef91d6d794fba8b3"
+  },
+  "id": 1,
+  "name": "Retiro",
+  "detail": "",
+  "status": 1,
+  "creation_date": "2023-06-20",
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null
+},
+{
+  "_id": {
+    "$oid": "649caedcef91d6d794fba8b5"
+  },
+  "id": 2,
+  "name": "Deposito",
+  "detail": "",
+  "status": 1,
+  "creation_date": "2023-06-20",
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null
+},
+{
+  "_id": {
+    "$oid": "649caef8ef91d6d794fba8b7"
+  },
+  "id": 3,
+  "name": "Pago de Credito",
+  "detail": "",
+  "status": 1,
+  "creation_date": "2023-06-20",
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null
+},
+{
+  "_id": {
+    "$oid": "649caf06ef91d6d794fba8b8"
+  },
+  "id": 4,
+  "name": "Cargar Consumo",
+  "detail": "",
+  "status": 1,
+  "creation_date": "2023-06-20",
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null
+},
+{
+  "_id": {
+    "$oid": "64a5010b4c38d9b5049d1927"
+  },
+  "id": 5,
+  "name": "Cobro Automatico",
+  "detail": "",
+  "status": 1,
+  "creation_date": "2023-06-20",
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null
+},
+{
+  "_id": {
+    "$oid": "64a51fc44c38d9b5049d193e"
+  },
+  "id": 6,
+  "name": "Transferencia",
+  "detail": "",
+  "status": 1,
+  "creation_date": "2023-06-20",
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null
+}]

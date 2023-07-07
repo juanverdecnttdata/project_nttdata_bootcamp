@@ -1,0 +1,44 @@
+[{
+  "_id": "person_sequence",
+  "seq": 4736
+},
+{
+  "_id": "client_sequence",
+  "seq": 9
+},
+{
+  "_id": "account_sequence",
+  "seq": 44
+},
+{
+  "_id": "account_detail_sequence",
+  "seq": 39
+},
+{
+  "_id": "client_product_sequence",
+  "seq": 9
+},
+{
+  "_id": "account_history_sequence",
+  "seq": 32
+},
+{
+  "_id": "account_log_sequence",
+  "seq": 23
+},
+{
+  "_id": "client_product_log_sequence",
+  "seq": 5
+},
+{
+  "_id": "client_product_debt_account_sequence",
+  "seq": 3
+},
+{
+  "_id": "user_sequence",
+  "seq": 1
+},
+{
+  "_id": "client_product_user_wallet_sequence",
+  "seq": 3
+}]

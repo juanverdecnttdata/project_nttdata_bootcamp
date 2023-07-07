@@ -1,0 +1,24 @@
+[{
+  "_id": {
+    "$oid": "649caa71ef91d6d794fba8a9"
+  },
+  "id": 1,
+  "description": "Personal",
+  "status": 1,
+  "creation_date": "2023-06-20",
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null
+},
+{
+  "_id": {
+    "$oid": "649caa80ef91d6d794fba8ab"
+  },
+  "id": 2,
+  "description": "Empresarial",
+  "status": 1,
+  "creation_date": "2023-06-20",
+  "creation_terminal": "127.0.0.1",
+  "modification_date": null,
+  "modification_terminal": null
+}]

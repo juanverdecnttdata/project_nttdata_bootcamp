@@ -1,0 +1,116 @@
+[{
+  "_id": 36,
+  "id_client": 7,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-05T21:48:41.341Z"
+  },
+  "balance": "1718.00",
+  "id_product": 2,
+  "n_transactions": 0,
+  "_class": "com.nttdata.entity.Account"
+},
+{
+  "_id": 37,
+  "id_client": 2,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "balance": "5001",
+  "id_product": 2,
+  "n_transactions": 20,
+  "_class": "com.nttdata.entity.Account"
+},
+{
+  "_id": 39,
+  "id_client": 7,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-05T21:22:07.415Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "balance": "5000",
+  "id_product": 2,
+  "n_transactions": 20,
+  "_class": "com.nttdata.entity.Account"
+},
+{
+  "_id": 40,
+  "id_client": 7,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-05T21:25:18.751Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "balance": "5000",
+  "id_product": 2,
+  "n_transactions": 20,
+  "_class": "com.nttdata.entity.Account"
+},
+{
+  "_id": 41,
+  "id_client": 7,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-05T21:26:42.098Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-05T21:49:25.343Z"
+  },
+  "balance": "4100.00",
+  "id_product": 2,
+  "n_transactions": 18,
+  "_class": "com.nttdata.entity.Account"
+},
+{
+  "_id": 42,
+  "id_client": 7,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T06:13:23.981Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "balance": "5000",
+  "id_product": 2,
+  "n_transactions": 20,
+  "_class": "com.nttdata.entity.Account"
+},
+{
+  "_id": 43,
+  "id_client": 7,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T06:17:29.026Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:48:54.348Z"
+  },
+  "balance": "50",
+  "id_product": 2,
+  "n_transactions": 17,
+  "_class": "com.nttdata.entity.Account"
+},
+{
+  "_id": 44,
+  "id_client": 9,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T20:43:31.099Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:56:15.807Z"
+  },
+  "balance": "3888",
+  "id_product": 9,
+  "n_transactions": 8,
+  "_class": "com.nttdata.entity.Account"
+}]

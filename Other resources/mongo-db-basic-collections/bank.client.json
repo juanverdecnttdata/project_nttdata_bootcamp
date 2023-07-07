@@ -1,0 +1,44 @@
+[{
+  "_id": 2,
+  "id_person": 1,
+  "status": 1,
+  "id_client_type": 1,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.Client"
+},
+{
+  "_id": 7,
+  "id_person": 2,
+  "status": 1,
+  "id_client_type": 2,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.Client"
+},
+{
+  "_id": 8,
+  "id_person": 4735,
+  "status": 1,
+  "id_client_type": 1,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.Client"
+},
+{
+  "_id": 9,
+  "id_person": 4736,
+  "status": 1,
+  "id_client_type": 1,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.Client"
+}]

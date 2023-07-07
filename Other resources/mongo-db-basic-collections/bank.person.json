@@ -1,0 +1,64 @@
+[{
+  "_id": 1,
+  "first_name": "Juan Carlos",
+  "last_name": "Verde Cortez",
+  "age": 31,
+  "gender": 1,
+  "status": 1,
+  "start_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.Person"
+},
+{
+  "_id": 2,
+  "first_name": "Maria Mariana",
+  "last_name": "Sanchez Caleroz",
+  "age": 25,
+  "gender": 0,
+  "status": 1,
+  "start_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.Person"
+},
+{
+  "_id": 4735,
+  "first_name": "Janet Ale",
+  "last_name": "Carrion Villar",
+  "age": 29,
+  "gender": 0,
+  "status": 1,
+  "start_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.Person"
+},
+{
+  "_id": 4736,
+  "first_name": "Jefferson Alexander",
+  "last_name": "Guevara Lee",
+  "age": 18,
+  "gender": 1,
+  "status": 1,
+  "start_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.Person"
+}]

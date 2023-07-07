@@ -21,4 +21,9 @@ public class UserController {
   public Flux<User> listUser() {
     return userService.getAll();
   }
+  @GetMapping("/getUserById/{id}")
+  public Mono<User> getUserById(@PathVariable("id") Long id){
+    return userService.getUserById(id);
+  }
+
 }

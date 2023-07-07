@@ -37,4 +37,8 @@ public class UserService {
   public Flux<User> getAll() {
     return userRepository.findAll();
   }
+
+  public Mono<User> getUserById(Long id){
+    return userRepository.findById(id);
+  }
 }

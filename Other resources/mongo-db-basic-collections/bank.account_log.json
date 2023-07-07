@@ -1,0 +1,362 @@
+[{
+  "_id": 2,
+  "id_account": 41,
+  "id_client": 7,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-05T21:26:42.098Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "balance": "5000",
+  "id_product": 2,
+  "n_transactions": 20,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 3,
+  "id_account": 36,
+  "id_client": 7,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-06-20T18:25:43.511Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-05T21:48:41.341Z"
+  },
+  "balance": "1718.00",
+  "id_product": 2,
+  "n_transactions": 0,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 4,
+  "id_account": 41,
+  "id_client": 7,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-05T21:26:42.098Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-05T21:49:08.972Z"
+  },
+  "balance": "4550.00",
+  "id_product": 2,
+  "n_transactions": 19,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 5,
+  "id_account": 41,
+  "id_client": 7,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-05T21:26:42.098Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-05T21:49:25.343Z"
+  },
+  "balance": "4100.00",
+  "id_product": 2,
+  "n_transactions": 18,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 6,
+  "id_account": 42,
+  "id_client": 7,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T06:13:23.981Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "balance": "5000",
+  "id_product": 2,
+  "n_transactions": 20,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 7,
+  "id_account": 43,
+  "id_client": 7,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T06:17:29.026Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "balance": "5000",
+  "id_product": 2,
+  "n_transactions": 20,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 8,
+  "id_account": 44,
+  "id_client": 9,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T20:43:31.099Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "balance": "5000",
+  "id_product": 9,
+  "n_transactions": 20,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 9,
+  "id_account": 43,
+  "id_client": 7,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T06:17:29.026Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:11:23.182Z"
+  },
+  "balance": "5450.00",
+  "id_product": 2,
+  "n_transactions": 19,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 10,
+  "id_account": 44,
+  "id_client": 9,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T20:43:31.099Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:17:12.831Z"
+  },
+  "balance": "10000",
+  "id_product": 9,
+  "n_transactions": 19,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 11,
+  "id_account": 44,
+  "id_client": 9,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T20:43:31.099Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:17:18.828Z"
+  },
+  "balance": "15001",
+  "id_product": 9,
+  "n_transactions": 18,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 12,
+  "id_account": 43,
+  "id_client": 7,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T06:17:29.026Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:38:56.144Z"
+  },
+  "balance": "500",
+  "id_product": 2,
+  "n_transactions": 17,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 13,
+  "id_account": 43,
+  "id_client": 7,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T06:17:29.026Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:48:54.348Z"
+  },
+  "balance": "50",
+  "id_product": 2,
+  "n_transactions": 17,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 14,
+  "id_account": 44,
+  "id_client": 9,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T20:43:31.099Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:56:03.002Z"
+  },
+  "balance": "3990",
+  "id_product": 9,
+  "n_transactions": 17,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 15,
+  "id_account": 44,
+  "id_client": 9,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T20:43:31.099Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:56:04.117Z"
+  },
+  "balance": "3980",
+  "id_product": 9,
+  "n_transactions": 16,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 16,
+  "id_account": 44,
+  "id_client": 9,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T20:43:31.099Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:56:05.041Z"
+  },
+  "balance": "3970",
+  "id_product": 9,
+  "n_transactions": 15,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 17,
+  "id_account": 44,
+  "id_client": 9,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T20:43:31.099Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:56:05.887Z"
+  },
+  "balance": "3960",
+  "id_product": 9,
+  "n_transactions": 14,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 18,
+  "id_account": 44,
+  "id_client": 9,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T20:43:31.099Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:56:06.780Z"
+  },
+  "balance": "3950",
+  "id_product": 9,
+  "n_transactions": 13,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 19,
+  "id_account": 44,
+  "id_client": 9,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T20:43:31.099Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:56:07.654Z"
+  },
+  "balance": "3940",
+  "id_product": 9,
+  "n_transactions": 12,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 20,
+  "id_account": 44,
+  "id_client": 9,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T20:43:31.099Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:56:08.537Z"
+  },
+  "balance": "3930",
+  "id_product": 9,
+  "n_transactions": 11,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 21,
+  "id_account": 44,
+  "id_client": 9,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T20:43:31.099Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:56:09.429Z"
+  },
+  "balance": "3920",
+  "id_product": 9,
+  "n_transactions": 10,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 22,
+  "id_account": 44,
+  "id_client": 9,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T20:43:31.099Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:56:12.619Z"
+  },
+  "balance": "3905",
+  "id_product": 9,
+  "n_transactions": 9,
+  "_class": "com.nttdata.entity.AccountLog"
+},
+{
+  "_id": 23,
+  "id_account": 44,
+  "id_client": 9,
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T20:43:31.099Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "modification_date": {
+    "$date": "2023-07-07T03:56:15.807Z"
+  },
+  "balance": "3888",
+  "id_product": 9,
+  "n_transactions": 8,
+  "_class": "com.nttdata.entity.AccountLog"
+}]

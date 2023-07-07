@@ -40,7 +40,6 @@ public class ClientController {
      */
     @GetMapping("/getClientById/{id}")
     public Mono<Client> getClientById(@PathVariable("id") Long id){
-        System.out.println("id " + id);
         return clientService.getClientById(id);
     }
 }

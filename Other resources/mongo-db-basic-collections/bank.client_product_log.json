@@ -1,0 +1,57 @@
+[{
+  "_id": 1,
+  "id_client_product": 5,
+  "id_client": 7,
+  "id_product": 4,
+  "credit_limit": "2000",
+  "credit": "1500",
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-05T22:02:02.318Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.ClientProductLog"
+},
+{
+  "_id": 2,
+  "id_client_product": 6,
+  "id_client": 7,
+  "id_product": 4,
+  "credit_limit": "2000",
+  "credit": "0",
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-05T22:02:34.224Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.ClientProductLog"
+},
+{
+  "_id": 3,
+  "id_client_product": 7,
+  "id_client": 7,
+  "id_product": 4,
+  "credit_limit": "2000",
+  "credit": "1050.00",
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-05T22:02:55.537Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.ClientProductLog"
+},
+{
+  "_id": 5,
+  "id_client_product": 9,
+  "id_client": 9,
+  "id_product": 9,
+  "id_account": 44,
+  "credit_limit": "0",
+  "credit": "2500",
+  "status": 1,
+  "creation_date": {
+    "$date": "2023-07-06T21:59:56.685Z"
+  },
+  "creation_terminal": "127.0.0.1",
+  "_class": "com.nttdata.entity.ClientProductLog"
+}]
