@@ -87,7 +87,6 @@ public class AccountService {
         List<ClientProduct> lstClientProduct = null;
         try {
             lstClientProduct = webClientProductClient.get().uri(Constant.getAllClientProduct).accept(MediaType.APPLICATION_JSON).retrieve().bodyToFlux(ClientProduct.class).onErrorResume(e -> Mono.empty())
-                    //.delaySubscription(Duration.ofSeconds(1))
                     .delaySubscription(Duration.ofMillis(150)).collectList().toFuture().get();
 
         } catch (InterruptedException e) {
