@@ -46,7 +46,6 @@ public class AccountHistoryController {
      */
     @PostMapping("/listAccountHistoryByAccount")
     public Flux<AccountHistory> listAccountHistoryByAccount(@RequestBody List<Account> account){
-        System.out.println("listAccountHistoryByAccount");
         List<AccountHistory> accountsHistory = null;
         try {
             accountsHistory = accountHistoryService.getAll().collectList().toFuture().get();
@@ -64,8 +63,6 @@ public class AccountHistoryController {
                         newAccountsHistory::set,
                         error -> System.out.println("error " + error.getMessage())
                 );
-        System.out.println(newAccountsHistory.get().size());
-
         return Flux.fromIterable(newAccountsHistory.get());
     }
     /**
